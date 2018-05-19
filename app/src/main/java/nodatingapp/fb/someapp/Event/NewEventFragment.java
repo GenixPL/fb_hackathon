@@ -87,8 +87,6 @@ public class NewEventFragment extends Fragment {
                 Double lat = data.getDoubleExtra("latitude", 0f);
                 Double lng = data.getDoubleExtra("longitude", 0f);
 
-                Log.d("NewEvent", "Lat: " + lat + " Lng: " + lng);
-
                 Geocoder geocoder = new Geocoder(getActivity());
                 try {
                     List<Address> addresses = geocoder.getFromLocation(lat, lng, 1);
