@@ -50,7 +50,7 @@
         android:layout_marginTop="10dp" />
 
     <EditText
-        android:id="@+id/editText4"
+        android:id="@+id/inputPersonLimit"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/dropdownCategories"
@@ -67,5 +67,28 @@
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         android:text="Create Event" />
+
+    <TextView
+        android:id="@+id/textViewUniqueKey"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="false"
+        android:layout_below="@+id/textView2"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="181dp"
+        android:layout_marginTop="15dp"
+        android:text="asdasd232fdh23"
+        android:textIsSelectable="true"
+        android:textSize="18sp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/inputPersonLimit"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="50dp"
+        android:text="Unqiue Event Invitation Key" />
 
 </RelativeLayout>
