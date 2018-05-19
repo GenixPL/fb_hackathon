@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -31,7 +32,7 @@ public class NewEventFragment extends Fragment {
     private TextView textViewUniqueKey;
     private Button buttonConfirmation;
     private Button buttonShowMap;
-    private Button buttonLocateMe;
+    private ImageButton buttonLocateMe;
     private EditText inputPersonLimit;
     private Spinner dropdownCategories;
     private EditText inputTime;

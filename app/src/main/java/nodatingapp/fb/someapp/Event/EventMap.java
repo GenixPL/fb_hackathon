@@ -17,6 +17,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 
+import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -97,8 +98,7 @@ public class EventMap extends AppCompatActivity {
 
             map.setMyLocationEnabled(true);
 
-            map.setMaxZoomPreference(5f);
-            map.setMinZoomPreference(3.4f);
+            map.animateCamera(CameraUpdateFactory.zoomTo(4.5f));
             map.setOnMapClickListener(onMapClickListener);
         }
     };
