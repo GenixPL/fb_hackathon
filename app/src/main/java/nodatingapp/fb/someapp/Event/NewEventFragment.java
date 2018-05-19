@@ -18,6 +18,8 @@ public class NewEventFragment extends Fragment {
 
     private TextView textViewUniqueKey;
     private Button buttonConfirmation;
+    private Button buttonShowMap;
+    private Button buttonLocateMe;
     private EditText inputPersonLimit;
     private Spinner dropdownCategories;
     private EditText inputTime;
@@ -38,7 +40,7 @@ public class NewEventFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
     {
-        View view = inflater.inflate(R.layout.fragment_event, container, false);
+        View view = inflater.inflate(R.layout.fragment_new_event, container, false);
 
         textViewUniqueKey   = view.findViewById(R.id.textViewUniqueKey);
         buttonConfirmation  = view.findViewById(R.id.buttonConfirmation);
@@ -47,6 +49,8 @@ public class NewEventFragment extends Fragment {
         inputTime           = view.findViewById(R.id.inputTime);
         inputName           = view.findViewById(R.id.inputName);
         inputPlace          = view.findViewById(R.id.inputPlace);
+        buttonShowMap       = view.findViewById(R.id.buttonShowMap);
+        buttonLocateMe      = view.findViewById(R.id.buttonLocateMe);
 
         return view;
     }
@@ -56,12 +60,20 @@ public class NewEventFragment extends Fragment {
         textViewUniqueKey.setText(uniqueID);
 
         buttonConfirmation.setOnClickListener(onClickListener);
+        buttonShowMap.setOnClickListener(onMapClickListener);
     }
 
     private View.OnClickListener onClickListener =  new View.OnClickListener() {
         @Override
         public void onClick(View v) {
 
+        }
+    };
+
+    private View.OnClickListener onMapClickListener =  new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.frame_new_event_content, new EventMap()).commit();
         }
     };
 }

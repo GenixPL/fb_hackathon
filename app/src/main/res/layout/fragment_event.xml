@@ -1,94 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/relativeLayoutNewEvent"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="15dp"
-    tools:context=".Event.EventActivity$PlaceholderFragment">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".Event.EventFragment">
 
-
-    <EditText
-        android:id="@+id/inputPlace"
+    <android.support.design.widget.TabLayout
+        android:id="@+id/tabLayoutViewPager"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true"
-        android:ems="10"
-        android:hint="Place"
-        android:inputType="textPersonName" />
+        app:tabGravity="fill"
+        app:tabMaxWidth="0dp"
+        app:tabMode="fixed" />
 
-    <EditText
-        android:id="@+id/inputName"
+    <android.support.v4.view.ViewPager
+        android:id="@+id/container"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
-        android:layout_below="@+id/inputPlace"
-        android:layout_marginTop="10dp"
-        android:ems="10"
-        android:hint="Name of Event"
-        android:inputType="textPersonName" />
-
-    <EditText
-        android:id="@+id/inputTime"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
-        android:layout_below="@+id/inputName"
-        android:layout_marginTop="10dp"
-        android:ems="10"
-        android:hint="Time"
-        android:inputType="time" />
-
-    <Spinner
-        android:id="@+id/dropdownCategories"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/inputTime"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="10dp" />
-
-    <EditText
-        android:id="@+id/inputPersonLimit"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/dropdownCategories"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="10dp"
-        android:ems="10"
-        android:hint="Person Limit:"
-        android:inputType="number" />
-
-    <Button
-        android:id="@+id/buttonConfirmation"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:text="Create Event" />
-
-    <TextView
-        android:id="@+id/textViewUniqueKey"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="false"
-        android:layout_below="@+id/textView2"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="181dp"
-        android:layout_marginTop="15dp"
-        android:text="asdasd232fdh23"
-        android:textIsSelectable="true"
-        android:textSize="18sp"
-        android:textStyle="bold" />
-
-    <TextView
-        android:id="@+id/textView2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/inputPersonLimit"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="50dp"
-        android:text="Unqiue Event Invitation Key" />
+        android:layout_below="@+id/tabLayoutViewPager"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
 </RelativeLayout>
