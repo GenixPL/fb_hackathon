@@ -11,6 +11,8 @@ public class Event
     private String category;
     private Integer personLimit;
     private String eventUnique;
+    private Double latitude;
+    private Double longitude;
     private List<Participant> participants;
 
     public Event() {}
@@ -61,5 +63,29 @@ public class Event
 
     public void setEventUnique(String eventUnique) {
         this.eventUnique = eventUnique;
+    }
+
+    public Double getLatitude() {
+        return latitude;
+    }
+
+    public void setLatitude(Double latitude) {
+        this.latitude = latitude;
+    }
+
+    public Double getLongitude() {
+        return longitude;
+    }
+
+    public void setLongitude(Double longitude) {
+        this.longitude = longitude;
+    }
+
+    public List<Participant> getParticipants() {
+        return participants;
+    }
+
+    public void setParticipants(List<Participant> participants) {
+        this.participants = participants;
     }
 }

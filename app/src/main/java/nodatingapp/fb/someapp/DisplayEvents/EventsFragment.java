@@ -10,6 +10,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
+import java.util.List;
+
 import nodatingapp.fb.someapp.Event.Models.Event;
 import nodatingapp.fb.someapp.Helpers.HttpHandler;
 import nodatingapp.fb.someapp.R;
@@ -30,7 +37,7 @@ public class EventsFragment extends Fragment {
         // Set the adapter
         if (view instanceof RecyclerView) {
             Context context = view.getContext();
-            RecyclerView recyclerView = (RecyclerView) view;
+            final RecyclerView recyclerView = (RecyclerView) view;
 
             recyclerView.setLayoutManager(new LinearLayoutManager(context));
 
@@ -39,23 +46,34 @@ public class EventsFragment extends Fragment {
                 public void onRequestFinished(String output) {
                     Log.d("EventsFragment", "Output: " + output);
 
-                    //recyclerView.setAdapter(new MyItemRecyclerViewAdapter(Event.ITEMS, mListener));
+                    try {
+                        JSONArray jsonObject = new JSONArray(output);
+
+                        List<Event> eventList = new ArrayList<>();
+                        for(int i = 0; i < jsonObject.length(); i++) {
+                            JSONObject ev = jsonObject.getJSONObject(i);
+
+                            Event event = new Event();
+                            //event.setEventTime(ev.getString("date"));
+                            event.setName(ev.getString("name"));
+                            event.setLatitude(ev.getDouble("latitude"));
+                            event.setLatitude(ev.getDouble("longitude"));
+                            event.setPersonLimit(ev.getInt("limit"));
+                            event.setPlace(ev.getString("placeName"));
+
+                            eventList.add(event);
+
+                            recyclerView.setAdapter(new EventsAdapter(getActivity(), eventList, mListener));
+                        }
+
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
                 }
             });
-            httpHandler.makeServiceCall();
+            httpHandler.execute();
         }
         return view;
-    }
-
-
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        if (context instanceof OnListFragmentInteractionListener) {
-            mListener = (OnListFragmentInteractionListener) context;
-        } else {
-            throw new RuntimeException(context.toString() + " must implement OnListFragmentInteractionListener");
-        }
     }
 
     @Override

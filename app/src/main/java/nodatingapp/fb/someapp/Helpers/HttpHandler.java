@@ -60,7 +60,9 @@ public class HttpHandler extends AsyncTask<String, Void, String>
         {
             URL url = new URL(reqUrl);
 
-            byte[] postDataBytes = jsonObject.toString().getBytes("UTF-8");
+            byte[] postDataBytes = new byte[0];
+            if(jsonObject != null)
+                postDataBytes = jsonObject.toString().getBytes("UTF-8");
 
             conn = (HttpURLConnection) url.openConnection();
             conn.setRequestMethod(callType.getType());
