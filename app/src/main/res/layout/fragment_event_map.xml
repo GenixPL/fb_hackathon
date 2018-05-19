@@ -7,6 +7,7 @@
     tools:context=".Event.EventMap">
 
     <com.google.android.gms.maps.MapView
+
         android:id="@+id/mapViewEventPosition"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -18,7 +19,7 @@
         android:layout_height="40dp"
         android:layout_centerHorizontal="true"
         android:layout_centerInParent="false"
-        android:layout_marginTop="30dp"
+        android:layout_marginTop="20dp"
         android:background="#ffffff"
         android:gravity="center_vertical|center_horizontal"
         android:orientation="horizontal">
@@ -32,5 +33,14 @@
             android:textAlignment="center"
             android:textStyle="bold" />
     </LinearLayout>
+
+    <Button
+        android:id="@+id/buttonFinish"
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:text="Finish"
+        android:visibility="gone" />
 
 </RelativeLayout>
