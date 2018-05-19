@@ -1,0 +1,68 @@
+package nodatingapp.fb.someapp.Event;
+
+
+import android.os.Bundle;
+import android.app.Fragment;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.RatingBar;
+import android.widget.TextView;
+
+import com.bumptech.glide.Glide;
+
+import nodatingapp.fb.someapp.R;
+
+/**
+ * A simple {@link Fragment} subclass.
+ */
+public class EventInfo extends android.support.v4.app.Fragment {
+
+    private TextView textViewName;
+    private ImageView imageViewLocationInfo;
+    private RatingBar ratingBarUser;
+    private TextView textViewOrganizerName;
+    private ImageView imageViewUser;
+    private TextView textViewPlaceName;
+    private LinearLayout linearLayoutTags;
+    private Button buttonEnroll;
+    private TextView textViewDate;
+
+    public EventInfo() {
+        // Required empty public constructor
+    }
+
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        // Inflate the layout for this fragment
+        return inflater.inflate(R.layout.fragment_event_info, container, false);
+    }
+
+    @Override
+    public void onViewCreated(View view, Bundle bundle) {
+        textViewName = view.findViewById(R.id.textViewName);
+        imageViewLocationInfo = view.findViewById(R.id.imageViewLocationInfo);
+        ratingBarUser = view.findViewById(R.id.ratingBarUser);
+        textViewOrganizerName = view.findViewById(R.id.textViewOrganizerName);
+        imageViewUser = view.findViewById(R.id.imageViewUser);
+        textViewPlaceName = view.findViewById(R.id.textViewPlaceName);
+        linearLayoutTags = view.findViewById(R.id.linearLayoutTags);
+        buttonEnroll = view.findViewById(R.id.buttonEnroll);
+        textViewDate = view.findViewById(R.id.textViewDate);
+
+        textViewName.setText(EventActivity.event.getName());
+        Glide.with(view.getContext()).load("https://maps.googleapis.com/maps/api/staticmap?center=" + EventActivity.event.getLatitude() + "," + EventActivity.event.getLongitude() + "&zoom=5&size=600x300&maptype=roadmap&markers=color:red%7Clabel:S%7C" + EventActivity.event.getLatitude() + "," + EventActivity.event.getLongitude() + "&key=AIzaSyBEg0bNOmQ3x-i5Y9sv1Oc799uRM9lhe84").into(imageViewLocationInfo);
+//        ratingBarUser.setRating(EventActivity.event.getCreator().getRating().floatValue());
+//        textViewOrganizerName.setText(EventActivity.event.getCreator().getName());
+        ratingBarUser.setRating(3.4f);
+        textViewOrganizerName.setText("Edvinko");
+
+        Glide.with(view.getContext()).load("https://maps.googleapis.com/maps/api/staticmap?center=" + EventActivity.event.getLatitude() + "," + EventActivity.event.getLongitude() + "&zoom=5&size=600x300&maptype=roadmap&markers=color:red%7Clabel:S%7C" + EventActivity.event.getLatitude() + "," + EventActivity.event.getLongitude() + "&key=AIzaSyBEg0bNOmQ3x-i5Y9sv1Oc799uRM9lhe84").into(imageViewUser);
+        textViewPlaceName.setText(EventActivity.event.getPlace());
+        textViewDate.setText("12 December, 2013");
+    }
+}

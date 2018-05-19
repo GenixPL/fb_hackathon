@@ -4,6 +4,8 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
+import nodatingapp.fb.someapp.Event.EventActivity;
+import nodatingapp.fb.someapp.Event.EventInfo;
 import nodatingapp.fb.someapp.Event.NewEventFragment;
 import nodatingapp.fb.someapp.Event.ParticipantsFragment;
 
@@ -22,7 +24,7 @@ public class EventPagesAdapter extends FragmentPagerAdapter {
         // Return a PlaceholderFragment (defined as a static inner class below).
 
         switch (position) {
-            case 0: return new NewEventFragment();
+            case 0: return EventActivity.event == null ? new NewEventFragment() : (new EventInfo());
             case 1: return new ParticipantsFragment();
         }
 
