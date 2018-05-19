@@ -2,6 +2,9 @@
     <string name="app_name">SomeApp</string>
     <string name="title_activity_event">EventActivity</string>
     <string name="action_settings">Settings</string>
+    <string name="interest_football">Football</string>
+    <string name="interested">interested</string>
+    <string name="not_interested">not interested</string>
     <string name="section_format">Hello World from section: %1$d</string>
 
     <!-- TODO: Remove or change this placeholder text -->
