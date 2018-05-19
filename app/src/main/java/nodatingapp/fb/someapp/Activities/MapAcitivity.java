@@ -44,6 +44,7 @@ public class MapAcitivity extends AppCompatActivity implements OnMapReadyCallbac
     private TextView date_textView;
     private TextView place_textView;
     private static final int NEW_EVENT_REQUEST_CODE = 0;
+    public static int mapLevel = 15;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,6 +58,7 @@ public class MapAcitivity extends AppCompatActivity implements OnMapReadyCallbac
         //VARIABLES
         ourLocationProvider = new OurLocationProvider(this);
         date_textView = findViewById(R.id.textView_date);
+        place_textView = findViewById(R.id.textView_place);
 
         //INIT VARIABLES
         if(mapViewDate != null) {
@@ -82,18 +84,17 @@ public class MapAcitivity extends AppCompatActivity implements OnMapReadyCallbac
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
 
-        // Add a marker in Sydney and move the camera
+        // Add a marker in current user position
         double lat = ourLocationProvider.getCurrentUserLocation().getLatitude();
         double lon = ourLocationProvider.getCurrentUserLocation().getLongitude();
         LatLng currentPosition = new LatLng(lat, lon);
-        mMap.addMarker(new MarkerOptions().position(currentPosition).title("Marker in current user position"));
-        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(currentPosition, 15));
+        mMap.addMarker(new MarkerOptions().position(currentPosition).title("Your current position"));
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(currentPosition, mapLevel));
     }
 
     public void goToCurrentEvents_But(View view) {
         makeToast("Should swap to current events activity");
     }
-
 
     public void goToPickDate_But(View view) {
         startActivity(new Intent(this, PickDateActivity.class));
@@ -101,8 +102,7 @@ public class MapAcitivity extends AppCompatActivity implements OnMapReadyCallbac
     }
 
     public void goToPickPlace_But(View view) {
-        startActivity(new Intent(this, EventMap.class));
-        this.finish();
+        startActivityForResult(new Intent(this, EventMap.class), NEW_EVENT_REQUEST_CODE);
     }
 
     @Override
@@ -117,7 +117,7 @@ public class MapAcitivity extends AppCompatActivity implements OnMapReadyCallbac
                 Double lat = data.getDoubleExtra("latitude", 0f);
                 Double lng = data.getDoubleExtra("longitude", 0f);
 
-                Log.d("NewEvent", "Lat: " + lat + " Lng: " + lng);
+                makeToast("AAAAAAA");
 
                 Geocoder geocoder = new Geocoder(this);
                 try {

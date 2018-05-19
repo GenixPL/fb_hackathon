@@ -17,6 +17,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 
+import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -26,7 +27,9 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import java.util.ArrayList;
 import java.util.List;
 
+import nodatingapp.fb.someapp.Activities.MapAcitivity;
 import nodatingapp.fb.someapp.Helpers.Helper;
+import nodatingapp.fb.someapp.LocationStuff.OurLocationProvider;
 import nodatingapp.fb.someapp.R;
 
 /**
@@ -38,6 +41,7 @@ public class EventMap extends AppCompatActivity {
     private GoogleMap map;
     private LatLng latLng;
     private MarkerOptions markerOptions = new MarkerOptions();
+    private OurLocationProvider ourLocationProvider;
 
     private Button buttonFinish;
 
@@ -56,6 +60,7 @@ public class EventMap extends AppCompatActivity {
 
         buttonFinish = findViewById(R.id.buttonFinish);
         mapView = findViewById(R.id.mapViewEventPosition);
+        ourLocationProvider = new OurLocationProvider(this);
 
         mapView.onCreate(savedInstanceState);
         mapView.getMapAsync(onMapReadyCallback);
@@ -97,9 +102,14 @@ public class EventMap extends AppCompatActivity {
 
             map.setMyLocationEnabled(true);
 
-            map.setMaxZoomPreference(5f);
-            map.setMinZoomPreference(3.4f);
             map.setOnMapClickListener(onMapClickListener);
+
+            // Add a marker in current user position
+            double lat = ourLocationProvider.getCurrentUserLocation().getLatitude();
+            double lon = ourLocationProvider.getCurrentUserLocation().getLongitude();
+            LatLng currentPosition = new LatLng(lat, lon);
+            map.addMarker(new MarkerOptions().position(currentPosition).title("Your current position"));
+            map.moveCamera(CameraUpdateFactory.newLatLngZoom(currentPosition, MapAcitivity.mapLevel));
         }
     };
 
@@ -109,6 +119,15 @@ public class EventMap extends AppCompatActivity {
             latLng = ll;
 
             buttonFinish.setVisibility(Button.VISIBLE);
+
+            //remove makers
+            map.clear();
+
+            // Add a marker in current user position
+            double lat = ourLocationProvider.getCurrentUserLocation().getLatitude();
+            double lon = ourLocationProvider.getCurrentUserLocation().getLongitude();
+            LatLng currentPosition = new LatLng(lat, lon);
+            map.addMarker(new MarkerOptions().position(currentPosition).title("Your current position"));
 
             markerOptions.position(latLng);
             map.addMarker(markerOptions);
