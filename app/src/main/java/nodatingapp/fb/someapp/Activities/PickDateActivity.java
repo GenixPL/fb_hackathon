@@ -51,7 +51,7 @@ public class PickDateActivity extends AppCompatActivity {
         int minutes = Integer.parseInt(minutes_editText.getText().toString());
 
         Date dateToSave = new Date(year, month, day, hour, minutes);;
-        MapAcitivity.mapViewDate = dateToSave;
+        SetAvailabilityActivity.mapViewDate = dateToSave;
 
         this.finish();
         startActivity(new Intent(this, MapAcitivity.class));
