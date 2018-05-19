@@ -2,6 +2,7 @@ package nodatingapp.fb.someapp.Event;
 
 
 import android.Manifest;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Geocoder;
 import android.os.Bundle;
@@ -9,6 +10,7 @@ import android.provider.SyncStateContract;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -30,14 +32,14 @@ import nodatingapp.fb.someapp.R;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class EventMap extends Fragment {
+public class EventMap extends AppCompatActivity {
 
     private MapView mapView;
     private GoogleMap map;
+    private LatLng latLng;
+    private MarkerOptions markerOptions = new MarkerOptions();
 
     private Button buttonFinish;
-
-    private MarkerOptions markerOptions = new MarkerOptions();
 
     private String[] appPermisions = new String[]{
             Manifest.permission.ACCESS_COARSE_LOCATION,
@@ -47,19 +49,15 @@ public class EventMap extends Fragment {
         // Required empty public constructor
     }
 
-
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_event_map, container, false);
-    }
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.fragment_event_map);
 
-    @Override
-    public void onViewCreated(View view, Bundle savedInstanceBundle) {
-        buttonFinish = view.findViewById(R.id.buttonFinish);
-        mapView = view.findViewById(R.id.mapViewEventPosition);
+        buttonFinish = findViewById(R.id.buttonFinish);
+        mapView = findViewById(R.id.mapViewEventPosition);
 
-        mapView.onCreate(savedInstanceBundle);
+        mapView.onCreate(savedInstanceState);
         mapView.getMapAsync(onMapReadyCallback);
 
         buttonFinish.setOnClickListener(onButtonFinishClickListener);
@@ -68,7 +66,11 @@ public class EventMap extends Fragment {
     private View.OnClickListener onButtonFinishClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-
+            Intent intent = new Intent();
+            intent.putExtra("latitude", latLng.latitude);
+            intent.putExtra("longitude", latLng.longitude);
+            setResult(RESULT_OK, intent);
+            finish();
         }
     };
 
@@ -83,7 +85,7 @@ public class EventMap extends Fragment {
             List<String> listPermissionsNeeded = new ArrayList<>();
             for (String p : appPermisions)
             {
-                result = ContextCompat.checkSelfPermission(getActivity(), p);
+                result = ContextCompat.checkSelfPermission(EventMap.this, p);
                 if (result != PackageManager.PERMISSION_GRANTED)
                 {
                     listPermissionsNeeded.add(p);
@@ -91,7 +93,7 @@ public class EventMap extends Fragment {
             }
 
             if (!listPermissionsNeeded.isEmpty())
-                ActivityCompat.requestPermissions(getActivity(), listPermissionsNeeded.toArray(new String[listPermissionsNeeded.size()]), 10 );
+                ActivityCompat.requestPermissions(EventMap.this, listPermissionsNeeded.toArray(new String[listPermissionsNeeded.size()]), 10 );
 
             map.setMyLocationEnabled(true);
 
@@ -103,7 +105,9 @@ public class EventMap extends Fragment {
 
     private GoogleMap.OnMapClickListener onMapClickListener = new GoogleMap.OnMapClickListener() {
         @Override
-        public void onMapClick(LatLng latLng) {
+        public void onMapClick(LatLng ll) {
+            latLng = ll;
+
             buttonFinish.setVisibility(Button.VISIBLE);
 
             markerOptions.position(latLng);

@@ -1,7 +1,11 @@
 package nodatingapp.fb.someapp.Event;
 
+import android.content.Intent;
+import android.location.Address;
+import android.location.Geocoder;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,11 +14,19 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import com.google.android.gms.maps.model.LatLng;
+
+import java.io.IOException;
+import java.util.List;
 import java.util.UUID;
 
 import nodatingapp.fb.someapp.R;
 
+import static android.app.Activity.RESULT_OK;
+
 public class NewEventFragment extends Fragment {
+
+    private static final int NEW_EVENT_REQUEST_CODE = 0;
 
     private TextView textViewUniqueKey;
     private Button buttonConfirmation;
@@ -63,6 +75,32 @@ public class NewEventFragment extends Fragment {
         buttonShowMap.setOnClickListener(onMapClickListener);
     }
 
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        // check that it is the SecondActivity with an OK result
+        if (requestCode == NEW_EVENT_REQUEST_CODE) {
+            if (resultCode == RESULT_OK) {
+
+                // get String data from Intent
+                Double lat = data.getDoubleExtra("latitude", 0f);
+                Double lng = data.getDoubleExtra("longitude", 0f);
+
+                Log.d("NewEvent", "Lat: " + lat + " Lng: " + lng);
+
+                Geocoder geocoder = new Geocoder(getActivity());
+                try {
+                    List<Address> addresses = geocoder.getFromLocation(lat, lng, 1);
+
+                    inputPlace.setText(addresses.get(0).getAddressLine(0));
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
+
     private View.OnClickListener onClickListener =  new View.OnClickListener() {
         @Override
         public void onClick(View v) {
@@ -73,7 +111,10 @@ public class NewEventFragment extends Fragment {
     private View.OnClickListener onMapClickListener =  new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-            getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.frame_new_event_content, new EventMap()).commit();
+            Intent intent = new Intent(getActivity(), EventMap.class);
+            startActivityForResult(intent, NEW_EVENT_REQUEST_CODE);
         }
     };
+
+
 }
