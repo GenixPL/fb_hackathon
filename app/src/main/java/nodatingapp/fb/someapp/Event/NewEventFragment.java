@@ -3,6 +3,7 @@ package nodatingapp.fb.someapp.Event;
 import android.content.Intent;
 import android.location.Address;
 import android.location.Geocoder;
+import android.location.Location;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -21,6 +22,7 @@ import java.io.IOException;
 import java.util.List;
 import java.util.UUID;
 
+import nodatingapp.fb.someapp.LocationStuff.OurLocationProvider;
 import nodatingapp.fb.someapp.R;
 
 import static android.app.Activity.RESULT_OK;
@@ -74,6 +76,7 @@ public class NewEventFragment extends Fragment {
 
         buttonConfirmation.setOnClickListener(onClickListener);
         buttonShowMap.setOnClickListener(onMapClickListener);
+        buttonLocateMe.setOnClickListener(onLocateMeClickListener);
     }
 
     @Override
@@ -90,17 +93,20 @@ public class NewEventFragment extends Fragment {
 
                 Log.d("NewEvent", "Lat: " + lat + " Lng: " + lng);
 
-                Geocoder geocoder = new Geocoder(getActivity());
-                try {
-                    List<Address> addresses = geocoder.getFromLocation(lat, lng, 1);
-
-                    inputPlace.setText(addresses.get(0).getAddressLine(0));
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+                setEventPlace(lat, lng);
             }
         }
     }
+
+    private View.OnClickListener onLocateMeClickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            OurLocationProvider ourLocationProvider = new OurLocationProvider(getActivity());
+            Location location = ourLocationProvider.getCurrentUserLocation();
+
+            setEventPlace(location.getLatitude(), location.getLongitude());
+        }
+    };
 
     private View.OnClickListener onClickListener =  new View.OnClickListener() {
         @Override
@@ -117,5 +123,14 @@ public class NewEventFragment extends Fragment {
         }
     };
 
+    public void setEventPlace(double lat, double lng) {
+        Geocoder geocoder = new Geocoder(getActivity());
+        try {
+            List<Address> addresses = geocoder.getFromLocation(lat, lng, 1);
 
+            inputPlace.setText(addresses.get(0).getAddressLine(0));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 }
