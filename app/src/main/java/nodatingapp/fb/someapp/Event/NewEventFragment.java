@@ -126,9 +126,7 @@ public class NewEventFragment extends Fragment {
 
             List<JSONObject> tagsArray = new ArrayList<JSONObject>();
             try {
-                tagsArray.add(new JSONObject().put("name", "debug"));
-                tagsArray.add(new JSONObject().put("name", "debug"));
-                tagsArray.add(new JSONObject().put("name", "debug"));
+                tagsArray.add(new JSONObject().put("name", dropdownCategories.getSelectedItem().toString()));
             } catch (JSONException e) {
                 e.printStackTrace();
             }
