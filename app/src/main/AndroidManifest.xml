@@ -47,7 +47,8 @@
             android:name=".Event.EventMap"
             android:label="@string/title_activity_event"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".Activities.PickDateActivity"></activity>
+        <activity android:name=".Activities.PickDateActivity" />
+        <activity android:name=".Activities.SetAvailabilityActivity"></activity>
     </application>
 
 </manifest>

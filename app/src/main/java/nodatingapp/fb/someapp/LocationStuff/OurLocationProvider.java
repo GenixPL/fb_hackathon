@@ -28,7 +28,6 @@ public class OurLocationProvider {
         locationListener = new LocationListener() {
             public void onLocationChanged(Location location) {
                 currentLocation = location;
-                makeToast("location changed");
             }
 
             public void onStatusChanged(String provider, int status, Bundle extras) {
