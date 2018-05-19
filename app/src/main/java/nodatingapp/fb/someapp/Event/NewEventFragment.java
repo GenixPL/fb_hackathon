@@ -18,10 +18,17 @@ import android.widget.TextView;
 
 import com.google.android.gms.maps.model.LatLng;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+import nodatingapp.fb.someapp.Helpers.HttpHandler;
+import nodatingapp.fb.someapp.Helpers.JSONCreator;
 import nodatingapp.fb.someapp.LocationStuff.OurLocationProvider;
 import nodatingapp.fb.someapp.R;
 
@@ -42,6 +49,9 @@ public class NewEventFragment extends Fragment {
     private EditText inputPlace;
 
     private String uniqueID;
+
+    private Double latitude;
+    private Double longitude;
 
     public NewEventFragment() { }
 
@@ -88,12 +98,10 @@ public class NewEventFragment extends Fragment {
             if (resultCode == RESULT_OK) {
 
                 // get String data from Intent
-                Double lat = data.getDoubleExtra("latitude", 0f);
-                Double lng = data.getDoubleExtra("longitude", 0f);
+                latitude = data.getDoubleExtra("latitude", 0f);
+                longitude = data.getDoubleExtra("longitude", 0f);
 
-                Log.d("NewEvent", "Lat: " + lat + " Lng: " + lng);
-
-                setEventPlace(lat, lng);
+                setEventPlace(latitude, longitude);
             }
         }
     }
@@ -112,6 +120,31 @@ public class NewEventFragment extends Fragment {
         @Override
         public void onClick(View v) {
 
+            List<JSONObject> tagsArray = new ArrayList<JSONObject>();
+            try {
+                tagsArray.add(new JSONObject().put("name", "debug"));
+                tagsArray.add(new JSONObject().put("name", "debug"));
+                tagsArray.add(new JSONObject().put("name", "debug"));
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+            JSONArray jsonArray = new JSONArray(tagsArray);
+
+            JSONCreator jsonCreator = new JSONCreator();
+            jsonCreator.addField("name", "asdsadas");
+            jsonCreator.addField("placeName", "asdsadas");
+            jsonCreator.addField("description", "test description");
+            jsonCreator.addField("tags", jsonArray);
+            jsonCreator.addField("latitude", 12.3);
+            jsonCreator.addField("longitude", 12.0f);
+            jsonCreator.addField("radius", 212);
+            jsonCreator.addField("date", "12:34, 3 Dec 1997 PST");
+
+            HttpHandler httpHandler = new HttpHandler("http://3d1342c1.ngrok.io/event/create", HttpHandler.Type.POST);
+            httpHandler.setJsonObject(jsonCreator.getFinalObject());
+
+            httpHandler.execute();
         }
     };
 
