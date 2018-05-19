@@ -19,6 +19,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentStart="true"
             android:layout_alignParentTop="true"
+            android:layout_weight="1"
             android:ems="10"
             android:hint="Place"
             android:inputType="textPersonName" />
@@ -27,13 +28,15 @@
             android:id="@+id/buttonShowMap"
             android:layout_width="65dp"
             android:layout_height="wrap_content"
+            android:layout_weight="1"
             android:text="Map" />
 
-        <Button
+        <ImageButton
             android:id="@+id/buttonLocateMe"
             android:layout_width="65dp"
             android:layout_height="wrap_content"
-            android:text="Locate"
+            android:layout_weight="1"
+            android:src="@android:drawable/ic_dialog_map"
             android:textSize="10sp" />
 
     </LinearLayout>
@@ -66,7 +69,8 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/inputTime"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="10dp" />
+        android:layout_marginTop="10dp"
+        android:entries="@array/items"/>
 
     <EditText
         android:id="@+id/inputPersonLimit"
@@ -87,7 +91,6 @@
         android:layout_below="@+id/textView2"
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="181dp"
-        android:layout_marginTop="15dp"
         android:text="asdasd232fdh23"
         android:textIsSelectable="true"
         android:textSize="18sp"

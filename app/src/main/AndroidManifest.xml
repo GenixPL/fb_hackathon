@@ -31,6 +31,15 @@
             </intent-filter>
         </activity>
         <activity android:name=".Activities.MapAcitivity" />
+        <activity android:name=".Event.EventActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <!-- <activity android:name=".Activities.MapAcitivity" /> -->
         <!--
              The API key for Google Maps-based APIs is defined as a string resource.
              (See the file "res/values/google_maps_api.xml").
@@ -49,6 +58,16 @@
             android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".Activities.PickDateActivity" />
         <activity android:name=".Activities.SetAvailabilityActivity"></activity>
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".DisplayEvents.DisplayEvent"
+            android:label="@string/title_activity_display_event">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
     </application>
 
 </manifest>

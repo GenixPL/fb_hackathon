@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="items">
+        <item>Chess</item>
+        <item>Movie</item>
+        <item>Play Football</item>
+        <item>Tennis</item>
+        <item>BBQ</item>
+    </string-array>
+</resources>
