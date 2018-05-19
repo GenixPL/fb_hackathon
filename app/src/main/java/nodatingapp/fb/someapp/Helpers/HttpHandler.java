@@ -66,11 +66,14 @@ public class HttpHandler extends AsyncTask<String, Void, String>
             conn.setRequestMethod(callType.getType());
             conn.setRequestProperty("Content-Type", "application/json");
             conn.setDoInput(true);
-            conn.setDoOutput(true);
 
-            OutputStream outputStream = conn.getOutputStream();
-            outputStream.write(postDataBytes);
-            outputStream.flush();
+            if(callType == Type.POST) {
+                conn.setDoOutput(true);
+
+                OutputStream outputStream = conn.getOutputStream();
+                outputStream.write(postDataBytes);
+                outputStream.flush();
+            }
             // read the response
             InputStream in = new BufferedInputStream(conn.getInputStream());
             response = Helper.convertStreamToString(TAG, in);
