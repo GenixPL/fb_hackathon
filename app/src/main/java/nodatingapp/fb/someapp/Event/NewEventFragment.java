@@ -15,6 +15,7 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.maps.model.LatLng;
 
@@ -112,6 +113,9 @@ public class NewEventFragment extends Fragment {
             OurLocationProvider ourLocationProvider = new OurLocationProvider(getActivity());
             Location location = ourLocationProvider.getCurrentUserLocation();
 
+            latitude = location.getLatitude();
+            longitude = location.getLongitude();
+
             setEventPlace(location.getLatitude(), location.getLongitude());
         }
     };
@@ -132,16 +136,23 @@ public class NewEventFragment extends Fragment {
             JSONArray jsonArray = new JSONArray(tagsArray);
 
             JSONCreator jsonCreator = new JSONCreator();
-            jsonCreator.addField("name", "asdsadas");
-            jsonCreator.addField("placeName", "asdsadas");
+            jsonCreator.addField("uniqueKey", textViewUniqueKey.getText());
+            jsonCreator.addField("name", inputName.getText());
+            jsonCreator.addField("placeName", inputPlace.getText());
             jsonCreator.addField("description", "test description");
             jsonCreator.addField("tags", jsonArray);
-            jsonCreator.addField("latitude", 12.3);
-            jsonCreator.addField("longitude", 12.0f);
+            jsonCreator.addField("latitude", latitude);
+            jsonCreator.addField("longitude", longitude);
             jsonCreator.addField("radius", 212);
+            jsonCreator.addField("limit", Integer.parseInt(inputPersonLimit.getText().toString()));
             jsonCreator.addField("date", "12:34, 3 Dec 1997 PST");
 
-            HttpHandler httpHandler = new HttpHandler("http://3d1342c1.ngrok.io/event/create", HttpHandler.Type.POST);
+            HttpHandler httpHandler = new HttpHandler("http://3d1342c1.ngrok.io/event/create", HttpHandler.Type.POST, new HttpHandler.IOnRequestFinished() {
+                @Override
+                public void onRequestFinished(String output) {
+                    Toast.makeText(getActivity(), "You have successfully created the event", Toast.LENGTH_LONG).show();
+                }
+            });
             httpHandler.setJsonObject(jsonCreator.getFinalObject());
 
             httpHandler.execute();

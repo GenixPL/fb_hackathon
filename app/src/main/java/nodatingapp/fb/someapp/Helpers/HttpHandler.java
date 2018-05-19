@@ -33,10 +33,18 @@ public class HttpHandler extends AsyncTask<String, Void, String>
 
     private HttpURLConnection conn;
 
-    public HttpHandler(String reqUrl, Type type)
+    public interface IOnRequestFinished
+    {
+        void onRequestFinished(String output);
+    }
+
+    private IOnRequestFinished iOnRequestFinished;
+
+    public HttpHandler(String reqUrl, Type type, IOnRequestFinished iOnRequestFinished)
     {
         this.reqUrl     = reqUrl;
         this.callType   = type;
+        this.iOnRequestFinished = iOnRequestFinished;
     }
 
     public void setJsonObject(JSONObject jsonObject)
@@ -52,7 +60,6 @@ public class HttpHandler extends AsyncTask<String, Void, String>
         {
             URL url = new URL(reqUrl);
 
-            Log.d("HttpHandler", jsonObject.toString());
             byte[] postDataBytes = jsonObject.toString().getBytes("UTF-8");
 
             conn = (HttpURLConnection) url.openConnection();
@@ -61,18 +68,15 @@ public class HttpHandler extends AsyncTask<String, Void, String>
             conn.setDoInput(true);
             conn.setDoOutput(true);
 
-            Log.d("HttpHandler", "debuggggg");
-
             OutputStream outputStream = conn.getOutputStream();
             outputStream.write(postDataBytes);
             outputStream.flush();
-
-            Log.d("HttpHandler", "debuggggg");
             // read the response
             InputStream in = new BufferedInputStream(conn.getInputStream());
             response = Helper.convertStreamToString(TAG, in);
 
-            //Log.d(TAG, "Connection Response Code: " + conn.getResponseCode());
+            Log.d(TAG, "Connection Response Code: " + conn.getResponseCode());
+            Log.d(TAG, "Response: " + response);
         }
         catch (MalformedURLException e)
         {
@@ -97,6 +101,11 @@ public class HttpHandler extends AsyncTask<String, Void, String>
     @Override
     protected String doInBackground(String... strings) {
         return makeServiceCall();
+    }
+
+    @Override
+    protected void onPostExecute(String result) {
+        iOnRequestFinished.onRequestFinished(result);
     }
 
     public enum Type
