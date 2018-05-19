@@ -54,7 +54,7 @@ public class PickDateActivity extends AppCompatActivity {
         SetAvailabilityActivity.mapViewDate = dateToSave;
 
         this.finish();
-        startActivity(new Intent(this, MapAcitivity.class));
+        startActivity(new Intent(this, SetAvailabilityActivity.class));
     }
 
     private void makeToast(String message){

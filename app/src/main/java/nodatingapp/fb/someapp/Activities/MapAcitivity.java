@@ -85,7 +85,7 @@ public class MapAcitivity extends AppCompatActivity implements OnMapReadyCallbac
         makeToast("Should swap to current events activity");
     }
 
-
-
-
+    public void setAvailability_But(View view) {
+        startActivity(new Intent(this, SetAvailabilityActivity.class));
+    }
 }

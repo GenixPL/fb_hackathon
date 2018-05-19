@@ -6,6 +6,7 @@ import android.location.Geocoder;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -22,6 +23,7 @@ public class SetAvailabilityActivity extends AppCompatActivity {
 
     private TextView date_textView;
     private TextView place_textView;
+    private Spinner spinner;
 
     private static final int NEW_EVENT_REQUEST_CODE = 0;
     private static double placeLat;
@@ -87,5 +89,11 @@ public class SetAvailabilityActivity extends AppCompatActivity {
 
     private void makeToast(String message){
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
+    }
+
+    public void startNotifying_But(View view) {
+        //notify...
+
+        this.finish();
     }
 }

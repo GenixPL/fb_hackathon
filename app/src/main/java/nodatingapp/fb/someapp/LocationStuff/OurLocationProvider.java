@@ -73,7 +73,6 @@ public class OurLocationProvider {
     }
 
 
-
     private void makeToast(String message){
         Toast.makeText(context, message, Toast.LENGTH_SHORT).show();
     }
