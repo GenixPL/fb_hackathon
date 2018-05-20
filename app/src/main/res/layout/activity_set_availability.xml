@@ -127,6 +127,6 @@
         android:textAlignment="textStart"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/textView7"
-        app:layout_constraintTop_toBottomOf="@+id/button_pickPlace" />
+        app:layout_constraintTop_toBottomOf="@+id/textView_place" />
 
 </android.support.constraint.ConstraintLayout>

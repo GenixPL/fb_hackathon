@@ -1,8 +1,15 @@
 package nodatingapp.fb.someapp.Activities;
 
+import android.app.Notification;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.Intent;
 import android.location.Address;
 import android.location.Geocoder;
+import android.os.AsyncTask;
+import android.os.Build;
+import android.support.v4.app.NotificationCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -30,6 +37,9 @@ public class SetAvailabilityActivity extends AppCompatActivity {
     private static double placeLon;
     public static Date mapViewDate;
 
+    private NotificationCompat.Builder notification;
+    private static final int uniqueID = 69;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -40,7 +50,6 @@ public class SetAvailabilityActivity extends AppCompatActivity {
 
         if(mapViewDate != null) {
             DateFormat formater = new SimpleDateFormat("MM-dd hh:mm");
-            makeToast(mapViewDate.toString());
             date_textView.setText("Date: " + mapViewDate.getYear() + "-" + formater.format(mapViewDate).toString());
         }
         setEventPlace();
@@ -92,7 +101,20 @@ public class SetAvailabilityActivity extends AppCompatActivity {
     }
 
     public void startNotifying_But(View view) {
-        //notify...
+        notification = new NotificationCompat.Builder(this,"hmm");
+        notification.setAutoCancel(true);
+        notification.setSmallIcon(R.mipmap.ic_launcher);
+        notification.setTicker("Socialize: New events!");
+        notification.setWhen(System.currentTimeMillis());
+        notification.setContentTitle("Socialize");
+        notification.setContentText("New events are available nearby you!");
+
+        Intent intent = new Intent(this, MapAcitivity.class);
+        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0 , intent, PendingIntent.FLAG_UPDATE_CURRENT);
+        notification.setContentIntent(pendingIntent);
+
+        NotificationManager nm = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+        nm.notify(uniqueID, notification.build());
 
         this.finish();
     }

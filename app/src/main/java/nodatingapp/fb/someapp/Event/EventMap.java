@@ -84,6 +84,7 @@ public class EventMap extends AppCompatActivity {
         public void onMapReady(GoogleMap googleMap) {
             map = googleMap;
 
+            map.getUiSettings().setZoomControlsEnabled(true);
             map.getUiSettings().setMyLocationButtonEnabled(false);
 
             int result;
