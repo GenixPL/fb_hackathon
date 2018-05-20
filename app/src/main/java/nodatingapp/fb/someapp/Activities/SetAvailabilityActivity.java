@@ -45,7 +45,7 @@ public class SetAvailabilityActivity extends AppCompatActivity {
     private NotificationCompat.Builder notification;
     private static final int uniqueID = 69;
 
-    private boolean flagForLoop = false;
+    private boolean flagForLoop = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -81,7 +81,7 @@ public class SetAvailabilityActivity extends AppCompatActivity {
                 placeLat = data.getDoubleExtra("latitude", 0f);
                 placeLon = data.getDoubleExtra("longitude", 0f);
 
-                //setEventPlace();
+                setEventPlace();
             }
         } else if (requestCode == NEW_EVENT_REQUEST_CODE_DATE) {
             if (resultCode == RESULT_OK) {
@@ -131,33 +131,14 @@ public class SetAvailabilityActivity extends AppCompatActivity {
             public void run() {
                 //TODO your background code
 
-                while (true) {
-                    try {
-                        Thread.sleep(1000);
-                    } catch (Exception e) {
-                        break;
-                    }
+                while (flagForLoop) {
+//                    try {
+//                        Thread.sleep(1000);
+//                    } catch (Exception e) {
+//                        break;
+//                    }
 
                     isEventAvailable();
-
-                    if (flagForLoop) {
-                        notification = new NotificationCompat.Builder(getApplicationContext(), "hmm");
-                        notification.setAutoCancel(true);
-                        notification.setSmallIcon(R.mipmap.ic_launcher);
-                        notification.setTicker("Socialize: New events!");
-                        notification.setWhen(System.currentTimeMillis());
-                        notification.setContentTitle("Socialize");
-                        notification.setContentText("New events are available nearby you!");
-
-                        Intent intent = new Intent(getApplicationContext(), MapAcitivity.class);
-                        PendingIntent pendingIntent = PendingIntent.getActivity(getApplicationContext(), 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
-                        notification.setContentIntent(pendingIntent);
-
-                        NotificationManager nm = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
-                        nm.notify(uniqueID, notification.build());
-
-                        break;
-                    }
                 }
             }
         });
@@ -172,8 +153,22 @@ public class SetAvailabilityActivity extends AppCompatActivity {
         ourLocationProvider.getFilteredEvents(tags, new HttpHandler.IOnRequestFinished() {
             @Override
             public void onRequestFinished(String output) {
-                makeToast(output);
-                flagForLoop = true;
+                notification = new NotificationCompat.Builder(getApplicationContext(), "hmm");
+                notification.setAutoCancel(true);
+                notification.setSmallIcon(R.mipmap.ic_launcher);
+                notification.setTicker("Socialize: New events!");
+                notification.setWhen(System.currentTimeMillis());
+                notification.setContentTitle("Socialize");
+                notification.setContentText("New events are available nearby you!");
+
+                Intent intent = new Intent(getApplicationContext(), MapAcitivity.class);
+                PendingIntent pendingIntent = PendingIntent.getActivity(getApplicationContext(), 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+                notification.setContentIntent(pendingIntent);
+
+                NotificationManager nm = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+                nm.notify(uniqueID, notification.build());
+
+                flagForLoop = false;
             }
         });
     }
