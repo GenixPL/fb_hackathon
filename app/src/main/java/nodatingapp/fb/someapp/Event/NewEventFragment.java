@@ -210,6 +210,7 @@ public class NewEventFragment extends Fragment {
                 @Override
                 public void onRequestFinished(String output) {
                     Toast.makeText(getActivity(), "You have successfully created the event", Toast.LENGTH_LONG).show();
+                    getActivity().finish();
                 }
             });
             httpHandler.setJsonObject(jsonCreator.getFinalObject());
