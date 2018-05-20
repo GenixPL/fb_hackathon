@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RatingBar;
@@ -38,6 +39,7 @@ public class EventInfo extends android.support.v4.app.Fragment {
     private ImageView imageViewUser;
     private TextView textViewPlaceName;
     private LinearLayout linearLayoutTags;
+    private Button buttonTags;
     private Button buttonEnroll;
     private TextView textViewDate;
 
@@ -63,13 +65,14 @@ public class EventInfo extends android.support.v4.app.Fragment {
         linearLayoutTags = view.findViewById(R.id.linearLayoutTags);
         buttonEnroll = view.findViewById(R.id.buttonEnroll);
         textViewDate = view.findViewById(R.id.textViewDate);
+        buttonTags = view.findViewById(R.id.buttonTags);
 
         textViewName.setText(EventActivity.event.getName());
         Glide.with(view.getContext()).load("https://maps.googleapis.com/maps/api/staticmap?center=" + EventActivity.event.getLatitude() + "," + EventActivity.event.getLongitude() + "&zoom=16&size=600x300&maptype=roadmap&markers=color:red%7Clabel:S%7C" + EventActivity.event.getLatitude() + "," + EventActivity.event.getLongitude() + "&key=AIzaSyBEg0bNOmQ3x-i5Y9sv1Oc799uRM9lhe84").into(imageViewLocationInfo);
-//        ratingBarUser.setRating(EventActivity.event.getCreator().getRating().floatValue());
-//        textViewOrganizerName.setText(EventActivity.event.getCreator().getName());
-        ratingBarUser.setRating(3.4f);
+        ratingBarUser.setRating(EventActivity.event.getCreator().getRating().floatValue());
         textViewOrganizerName.setText(EventActivity.event.getCreator().getName());
+        buttonTags.setText(EventActivity.event.getCategory());
+
 
         Glide.with(view.getContext()).load(EventActivity.event.getCreator().getProfilePicture()).into(imageViewUser);
         textViewPlaceName.setText(EventActivity.event.getPlace());
@@ -108,7 +111,7 @@ public class EventInfo extends android.support.v4.app.Fragment {
                     public void onRequestFinished(String output) {
 
                         Toast.makeText(view.getContext(), "You have successfully registered for the event", Toast.LENGTH_LONG).show();
-                        getActivity().getSupportFragmentManager().popBackStack();
+                        getActivity().finish();
                     }
                 });
                 httpHandler.setJsonObject(jsonCreator.getFinalObject());
