@@ -126,33 +126,32 @@ public class SetAvailabilityActivity extends AppCompatActivity {
     }
 
     public void startNotifying_But(View view) {
+
         AsyncTask.execute(new Runnable() {
             @Override
             public void run() {
                 //TODO your background code
 
-                while (flagForLoop) {
-//                    try {
-//                        Thread.sleep(1000);
-//                    } catch (Exception e) {
-//                        break;
-//                    }
-
-                    isEventAvailable();
-                }
+                isEventAvailable();
             }
+
         });
+//        showNotify();
 
         this.finish();
     }
 
-    private void isEventAvailable(){
-        ArrayList<String> tags = new ArrayList<String>();
-        tags.add(spinner.getSelectedItem().toString());
-
-        ourLocationProvider.getFilteredEvents(tags, new HttpHandler.IOnRequestFinished() {
+    private void showNotify(){
+        AsyncTask.execute(new Runnable() {
             @Override
-            public void onRequestFinished(String output) {
+            public void run() {
+                //TODO your background code
+                try {
+                    Thread.sleep(1500);
+                }catch (Exception e) {
+                    ;
+                }
+
                 notification = new NotificationCompat.Builder(getApplicationContext(), "hmm");
                 notification.setAutoCancel(true);
                 notification.setSmallIcon(R.mipmap.ic_launcher);
@@ -167,8 +166,21 @@ public class SetAvailabilityActivity extends AppCompatActivity {
 
                 NotificationManager nm = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
                 nm.notify(uniqueID, notification.build());
+            }
+        });
 
+    }
+
+    private void isEventAvailable(){
+        ArrayList<String> tags = new ArrayList<String>();
+        tags.add(spinner.getSelectedItem().toString());
+
+        ourLocationProvider.getFilteredEvents(tags, new HttpHandler.IOnRequestFinished() {
+            @Override
+            public void onRequestFinished(String output) {
                 flagForLoop = false;
+                showNotify();
+                makeToast("data fetched from server");
             }
         });
     }
