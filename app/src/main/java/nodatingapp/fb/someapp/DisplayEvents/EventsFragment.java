@@ -20,6 +20,7 @@ import java.util.List;
 import nodatingapp.fb.someapp.Event.Models.Event;
 import nodatingapp.fb.someapp.Helpers.HttpHandler;
 import nodatingapp.fb.someapp.R;
+import nodatingapp.fb.someapp.User.User;
 
 public class EventsFragment extends Fragment {
 
@@ -60,6 +61,21 @@ public class EventsFragment extends Fragment {
                             event.setLatitude(ev.getDouble("longitude"));
                             event.setPersonLimit(ev.getInt("limit"));
                             event.setPlace(ev.getString("placeName"));
+                            event.setEventUnique(ev.getString("uniqueKey"));
+
+                            JSONArray userJsonObjects = new JSONArray(ev.getString("participants"));
+
+                            for(int j = 0; j < userJsonObjects.length(); j++) {
+                                JSONObject jsonObjectUser = userJsonObjects.getJSONObject(j);
+                                User usr = new User();
+                                usr.setName(jsonObjectUser.getString("name"));
+                                usr.setSurname(jsonObjectUser.getString("surname"));
+                                usr.setEmail(jsonObjectUser.getString("email"));
+                                usr.setRating(jsonObjectUser.getDouble("rating"));
+
+                                Log.d("EventsFragment", "Debug this");
+                                event.addParticipant(usr);
+                            }
 
                             eventList.add(event);
 

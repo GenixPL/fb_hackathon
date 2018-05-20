@@ -3,6 +3,7 @@ package nodatingapp.fb.someapp.Event;
 
 import android.os.Bundle;
 import android.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,9 +12,18 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RatingBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import nodatingapp.fb.someapp.Event.Models.Event;
+import nodatingapp.fb.someapp.Helpers.Authentication;
+import nodatingapp.fb.someapp.Helpers.HttpHandler;
+import nodatingapp.fb.someapp.Helpers.JSONCreator;
 import nodatingapp.fb.someapp.R;
 
 /**
@@ -43,7 +53,7 @@ public class EventInfo extends android.support.v4.app.Fragment {
     }
 
     @Override
-    public void onViewCreated(View view, Bundle bundle) {
+    public void onViewCreated(final View view, Bundle bundle) {
         textViewName = view.findViewById(R.id.textViewName);
         imageViewLocationInfo = view.findViewById(R.id.imageViewLocationInfo);
         ratingBarUser = view.findViewById(R.id.ratingBarUser);
@@ -64,5 +74,47 @@ public class EventInfo extends android.support.v4.app.Fragment {
         Glide.with(view.getContext()).load("https://maps.googleapis.com/maps/api/staticmap?center=" + EventActivity.event.getLatitude() + "," + EventActivity.event.getLongitude() + "&zoom=5&size=600x300&maptype=roadmap&markers=color:red%7Clabel:S%7C" + EventActivity.event.getLatitude() + "," + EventActivity.event.getLongitude() + "&key=AIzaSyBEg0bNOmQ3x-i5Y9sv1Oc799uRM9lhe84").into(imageViewUser);
         textViewPlaceName.setText(EventActivity.event.getPlace());
         textViewDate.setText("12 December, 2013");
+
+        if ((EventActivity.event.getPersonLimit() - EventActivity.event.getParticipants().size()) > 0)
+            buttonEnroll.setText("Participate - " + (EventActivity.event.getPersonLimit() - EventActivity.event.getParticipants().size()) + " places left");
+        else {
+            buttonEnroll.setText("No places left");
+            buttonEnroll.setEnabled(false);
+        }
+
+
+        buttonEnroll.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                JSONArray jsonArray = new JSONArray();
+                for(int i = 0; i < Authentication.getCurrentUser().getUserCategories().size(); i++) {
+                    try {
+                        jsonArray.put(new JSONObject().put("name", Authentication.getCurrentUser().getUserCategories().get(i)));
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+
+                JSONCreator jsonCreator = new JSONCreator();
+                jsonCreator.addField("name", Authentication.getCurrentUser().getName());
+                jsonCreator.addField("surname", Authentication.getCurrentUser().getSurname());
+                jsonCreator.addField("email", Authentication.getCurrentUser().getEmail());
+                jsonCreator.addField("tags", jsonArray);
+                jsonCreator.addField("rating", Authentication.getCurrentUser().getRating());
+
+                HttpHandler httpHandler = new HttpHandler("http://3d1342c1.ngrok.io/event/addParticipant?uniqueKey=" + EventActivity.event.getEventUnique(), HttpHandler.Type.POST, new HttpHandler.IOnRequestFinished() {
+                    @Override
+                    public void onRequestFinished(String output) {
+
+                        Toast.makeText(view.getContext(), "You have successfully registered for the event", Toast.LENGTH_LONG).show();
+                        getActivity().getSupportFragmentManager().popBackStack();
+                    }
+                });
+                httpHandler.setJsonObject(jsonCreator.getFinalObject());
+
+                httpHandler.execute();
+            }
+        });
     }
 }
