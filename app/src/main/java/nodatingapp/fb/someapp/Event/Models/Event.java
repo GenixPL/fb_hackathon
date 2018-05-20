@@ -1,6 +1,8 @@
 package nodatingapp.fb.someapp.Event.Models;
 
 import java.io.Serializable;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -44,8 +46,16 @@ public class Event implements Serializable
         return eventTime;
     }
 
-    public void setEventTime(Date eventTime) {
-        this.eventTime = eventTime;
+    public void setEventTime(String eventTime) {
+        SimpleDateFormat dateFormat = new SimpleDateFormat("H:m, d MMM yyyy z");
+        Date convertedDate = new Date();
+        try {
+            convertedDate = dateFormat.parse(eventTime);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        this.eventTime = convertedDate;
     }
 
     public String getCategory() {

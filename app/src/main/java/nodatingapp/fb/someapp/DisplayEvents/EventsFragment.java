@@ -74,8 +74,20 @@ public class EventsFragment extends Fragment {
                         event.setLongitude(ev.getDouble("longitude"));
                         event.setPersonLimit(ev.getInt("limit"));
                         event.setPlace(ev.getString("placeName"));
+                        event.setEventTime(ev.getString("date"));
                         event.setEventUnique(ev.getString("uniqueKey"));
                         event.setCategory(ev.getJSONArray("tags").getJSONObject(0).getString("name"));
+
+                        JSONObject creatorJson = ev.getJSONObject("organiser");
+
+                        User u = new User();
+                        u.setName((creatorJson != null) ? creatorJson.getString("name") : "Edvin");
+                        if(creatorJson != null) {
+                            u.setSurname(creatorJson.getString("surname"));
+                            u.setEmail(creatorJson.getString("email"));
+                            u.setRating(creatorJson.getDouble("rating"));
+                        }
+                        event.setCreator(u);
 
                         JSONArray userJsonObjects = new JSONArray(ev.getString("participants"));
 

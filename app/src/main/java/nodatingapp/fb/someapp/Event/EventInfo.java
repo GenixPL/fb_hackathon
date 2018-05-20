@@ -69,11 +69,11 @@ public class EventInfo extends android.support.v4.app.Fragment {
 //        ratingBarUser.setRating(EventActivity.event.getCreator().getRating().floatValue());
 //        textViewOrganizerName.setText(EventActivity.event.getCreator().getName());
         ratingBarUser.setRating(3.4f);
-        textViewOrganizerName.setText("Edvinko");
+        textViewOrganizerName.setText(EventActivity.event.getCreator().getName());
 
         Glide.with(view.getContext()).load("https://maps.googleapis.com/maps/api/staticmap?center=" + EventActivity.event.getLatitude() + "," + EventActivity.event.getLongitude() + "&zoom=16&size=600x300&maptype=roadmap&markers=color:red%7Clabel:S%7C" + EventActivity.event.getLatitude() + "," + EventActivity.event.getLongitude() + "&key=AIzaSyBEg0bNOmQ3x-i5Y9sv1Oc799uRM9lhe84").into(imageViewUser);
         textViewPlaceName.setText(EventActivity.event.getPlace());
-        textViewDate.setText("12 December, 2013");
+        textViewDate.setText(EventActivity.event.getEventTime().toString());
 
         if ((EventActivity.event.getPersonLimit() - EventActivity.event.getParticipants().size()) > 0)
             buttonEnroll.setText("Participate - " + (EventActivity.event.getPersonLimit() - EventActivity.event.getParticipants().size()) + " places left");

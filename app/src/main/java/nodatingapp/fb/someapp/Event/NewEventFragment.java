@@ -24,10 +24,16 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
+import nodatingapp.fb.someapp.Activities.PickDateActivity;
+import nodatingapp.fb.someapp.Helpers.Authentication;
 import nodatingapp.fb.someapp.Helpers.HttpHandler;
 import nodatingapp.fb.someapp.Helpers.JSONCreator;
 import nodatingapp.fb.someapp.LocationStuff.OurLocationProvider;
@@ -38,21 +44,26 @@ import static android.app.Activity.RESULT_OK;
 public class NewEventFragment extends Fragment {
 
     private static final int NEW_EVENT_REQUEST_CODE = 0;
+    private static final int NEW_EVENT_REQUEST_CODE_DATE = 1;
 
     private TextView textViewUniqueKey;
+    private TextView textViewDate;
     private Button buttonConfirmation;
     private Button buttonShowMap;
     private ImageButton buttonLocateMe;
     private EditText inputPersonLimit;
     private Spinner dropdownCategories;
-    private EditText inputTime;
     private EditText inputName;
     private EditText inputPlace;
+
+    private Button buttonAddDate;
 
     private String uniqueID;
 
     private Double latitude;
     private Double longitude;
+
+    private String outputDate;
 
     public NewEventFragment() { }
 
@@ -72,11 +83,12 @@ public class NewEventFragment extends Fragment {
         buttonConfirmation  = view.findViewById(R.id.buttonConfirmation);
         inputPersonLimit    = view.findViewById(R.id.inputPersonLimit);
         dropdownCategories  = view.findViewById(R.id.dropdownCategories);
-        inputTime           = view.findViewById(R.id.inputTime);
         inputName           = view.findViewById(R.id.inputName);
         inputPlace          = view.findViewById(R.id.inputPlace);
         buttonShowMap       = view.findViewById(R.id.buttonShowMap);
         buttonLocateMe      = view.findViewById(R.id.buttonLocateMe);
+        buttonAddDate       = view.findViewById(R.id.buttonAddDate);
+        textViewDate        = view.findViewById(R.id.textViewDate);
 
         return view;
     }
@@ -88,6 +100,12 @@ public class NewEventFragment extends Fragment {
         buttonConfirmation.setOnClickListener(onClickListener);
         buttonShowMap.setOnClickListener(onMapClickListener);
         buttonLocateMe.setOnClickListener(onLocateMeClickListener);
+        buttonAddDate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivityForResult(new Intent(getActivity(), PickDateActivity.class), NEW_EVENT_REQUEST_CODE_DATE);
+            }
+        });
     }
 
     @Override
@@ -107,6 +125,29 @@ public class NewEventFragment extends Fragment {
                 Log.d("NewEvent", "Lng 2: " + longitude);
 
                 setEventPlace(latitude, longitude);
+            }
+        }
+        else if (requestCode == NEW_EVENT_REQUEST_CODE_DATE) {
+            if (resultCode == RESULT_OK) {
+
+                int year = data.getIntExtra("year", 0);
+                int month = data.getIntExtra("month", 0);
+                int day = data.getIntExtra("day", 0);
+                int hour = data.getIntExtra("hour", 0);
+                int minutes = data.getIntExtra("minutes", 0);
+
+                DateFormat format = new SimpleDateFormat("dd-MM-yyyy HH:ss");
+                try {
+                    Date date = format.parse(day + "-" + month + "-" + year + " " + hour + ":" + minutes);
+
+                    outputDate = new SimpleDateFormat("H:m, d MMM yyyy z").format(date);
+                    Log.d("NewEvents", "Output date:" + outputDate);
+
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+
+                textViewDate.setText(outputDate);
             }
         }
     }
@@ -149,8 +190,16 @@ public class NewEventFragment extends Fragment {
             jsonCreator.addField("latitude", latitude);
             jsonCreator.addField("longitude", longitude);
             jsonCreator.addField("radius", 212);
+
+            JSONCreator userJson = new JSONCreator();
+            userJson.addField("name", Authentication.getCurrentUser().getName());
+            userJson.addField("surname", Authentication.getCurrentUser().getSurname());
+            userJson.addField("email", Authentication.getCurrentUser().getEmail());
+            userJson.addField("rating", Authentication.getCurrentUser().getRating());
+
+            jsonCreator.addField("organiser", userJson.getFinalObject());
             jsonCreator.addField("limit", Integer.parseInt(inputPersonLimit.getText().toString()));
-            jsonCreator.addField("date", "12:34, 3 Dec 1997 PST");
+            jsonCreator.addField("date", outputDate);
 
             HttpHandler httpHandler = new HttpHandler("http://3d1342c1.ngrok.io/event/create", HttpHandler.Type.POST, new HttpHandler.IOnRequestFinished() {
                 @Override
