@@ -58,7 +58,7 @@ public class EventsFragment extends Fragment {
                         //event.setEventTime(ev.getString("date"));
                         event.setName(ev.getString("name"));
                         event.setLatitude(ev.getDouble("latitude"));
-                        event.setLatitude(ev.getDouble("longitude"));
+                        event.setLongitude(ev.getDouble("longitude"));
                         event.setPersonLimit(ev.getInt("limit"));
                         event.setPlace(ev.getString("placeName"));
                         event.setEventUnique(ev.getString("uniqueKey"));

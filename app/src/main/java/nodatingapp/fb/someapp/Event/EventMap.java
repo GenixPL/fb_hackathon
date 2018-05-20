@@ -74,6 +74,10 @@ public class EventMap extends AppCompatActivity {
             Intent intent = new Intent();
             intent.putExtra("latitude", latLng.latitude);
             intent.putExtra("longitude", latLng.longitude);
+
+            Log.d("EventMap", "Lat 3: " + latLng.latitude);
+            Log.d("EventMap", "Lng 3: " + latLng.longitude);
+
             setResult(RESULT_OK, intent);
             finish();
         }

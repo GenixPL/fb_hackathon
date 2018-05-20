@@ -69,7 +69,9 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.ViewHolder
             }
         });
 
-        Glide.with(this.context).load("https://maps.googleapis.com/maps/api/staticmap?center=" + mValues.get(position).getLatitude() + "," + mValues.get(position).getLongitude() + "&zoom=5&size=600x300&maptype=roadmap&markers=color:red%7Clabel:S%7C" + mValues.get(position).getLatitude() + "," + mValues.get(position).getLongitude() + "&key=AIzaSyBEg0bNOmQ3x-i5Y9sv1Oc799uRM9lhe84").into(holder.imageViewLocationInfo);
+        Log.d("EventsAdapter", "Latitude= " + mValues.get(position).getLatitude());
+        Log.d("EventsAdapter", "Longitude= " + mValues.get(position).getLongitude());
+        Glide.with(this.context).load("https://maps.googleapis.com/maps/api/staticmap?center=" + mValues.get(position).getLatitude() + "," + mValues.get(position).getLongitude() + "&zoom=16&size=600x300&maptype=roadmap&markers=color:red%7Clabel:S%7C" + mValues.get(position).getLatitude() + "," + mValues.get(position).getLongitude() + "&key=AIzaSyBEg0bNOmQ3x-i5Y9sv1Oc799uRM9lhe84").into(holder.imageViewLocationInfo);
     }
 
     @Override

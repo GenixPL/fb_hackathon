@@ -102,6 +102,10 @@ public class NewEventFragment extends Fragment {
                 latitude = data.getDoubleExtra("latitude", 0f);
                 longitude = data.getDoubleExtra("longitude", 0f);
 
+                Log.d("NewEvent", "What it'' going on");
+                Log.d("NewEvent", "Lat 2: " + latitude);
+                Log.d("NewEvent", "Lng 2: " + longitude);
+
                 setEventPlace(latitude, longitude);
             }
         }
@@ -132,6 +136,9 @@ public class NewEventFragment extends Fragment {
             }
 
             JSONArray jsonArray = new JSONArray(tagsArray);
+
+            Log.d("NewEvent", "Lat: " + latitude);
+            Log.d("NewEvent", "Lng: " + longitude);
 
             JSONCreator jsonCreator = new JSONCreator();
             jsonCreator.addField("uniqueKey", textViewUniqueKey.getText());
@@ -166,6 +173,9 @@ public class NewEventFragment extends Fragment {
     };
 
     public void setEventPlace(double lat, double lng) {
+        Log.d("NewEvent", "Lat 2: " + lat);
+        Log.d("NewEvent", "Lng 2: " + lng);
+
         Geocoder geocoder = new Geocoder(getActivity());
         try {
             List<Address> addresses = geocoder.getFromLocation(lat, lng, 1);

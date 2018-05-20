@@ -37,7 +37,7 @@ public class ParticipantsFragment extends Fragment {
             RecyclerView recyclerView = (RecyclerView) view;
 
             recyclerView.setLayoutManager(new LinearLayoutManager(context));
-            recyclerView.setAdapter(new ParticipantsListAdapter(view.getContext(), EventActivity.event.getParticipants(), mListener));
+            recyclerView.setAdapter(new ParticipantsListAdapter(view.getContext(), EventActivity.event != null ? EventActivity.event.getParticipants() : new ArrayList<User>(), mListener));
         }
         return view;
     }
