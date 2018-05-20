@@ -50,11 +50,14 @@ public class PickDateActivity extends AppCompatActivity {
         int hour = Integer.parseInt(hour_editText.getText().toString());
         int minutes = Integer.parseInt(minutes_editText.getText().toString());
 
-        Date dateToSave = new Date(year, month, day, hour, minutes);;
-        SetAvailabilityActivity.mapViewDate = dateToSave;
-
-        this.finish();
-        startActivity(new Intent(this, MapAcitivity.class));
+        Intent intent = new Intent();
+        intent.putExtra("year", year);
+        intent.putExtra("month", month);
+        intent.putExtra("day", day);
+        intent.putExtra("hour", hour);
+        intent.putExtra("minutes", minutes);
+        setResult(RESULT_OK, intent);
+        finish();
     }
 
     private void makeToast(String message){
