@@ -56,7 +56,7 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.ViewHolder
     public void onBindViewHolder(final ViewHolder holder, final int position) {
 
         holder.textViewName.setText(mValues.get(position).getName());
-        holder.textViewOrganizerName.setText("Edvin");
+        holder.textViewOrganizerName.setText(mValues.get(position).getCreator().getName());
         holder.textViewDate.setText(mValues.get(position).getEventTime().toString());
         holder.buttonInfo.setOnClickListener(new View.OnClickListener() {
             @Override

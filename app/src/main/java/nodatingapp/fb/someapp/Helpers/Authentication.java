@@ -17,7 +17,7 @@ public class Authentication {
     public static User currentUser;
 
     public static User getCurrentUser() {
-        return new User();
+        return currentUser;
     }
 
     public static void setCurrentUser(User current_user) {

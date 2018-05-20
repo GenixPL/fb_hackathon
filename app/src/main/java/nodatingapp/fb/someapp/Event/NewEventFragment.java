@@ -191,6 +191,11 @@ public class NewEventFragment extends Fragment {
             jsonCreator.addField("longitude", longitude);
             jsonCreator.addField("radius", 212);
 
+            Log.d("NewEvent", "Name = " + Authentication.getCurrentUser().getName());
+            Log.d("NewEvent", "Surname = " + Authentication.getCurrentUser().getSurname());
+            Log.d("NewEvent", "Email = " + Authentication.getCurrentUser().getEmail());
+            Log.d("NewEvent", "Rating = " + Authentication.getCurrentUser().getRating());
+
             JSONCreator userJson = new JSONCreator();
             userJson.addField("name", Authentication.getCurrentUser().getName());
             userJson.addField("surname", Authentication.getCurrentUser().getSurname());

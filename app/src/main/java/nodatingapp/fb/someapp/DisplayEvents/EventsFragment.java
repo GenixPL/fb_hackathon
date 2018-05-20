@@ -81,12 +81,10 @@ public class EventsFragment extends Fragment {
                         JSONObject creatorJson = ev.getJSONObject("organiser");
 
                         User u = new User();
-                        u.setName((creatorJson != null) ? creatorJson.getString("name") : "Edvin");
-                        if(creatorJson != null) {
-                            u.setSurname(creatorJson.getString("surname"));
-                            u.setEmail(creatorJson.getString("email"));
-                            u.setRating(creatorJson.getDouble("rating"));
-                        }
+                        u.setName(creatorJson.getString("name"));
+                        u.setSurname(creatorJson.getString("surname"));
+                        u.setEmail(creatorJson.getString("email"));
+                        u.setRating(creatorJson.getDouble("rating"));
                         event.setCreator(u);
 
                         JSONArray userJsonObjects = new JSONArray(ev.getString("participants"));
