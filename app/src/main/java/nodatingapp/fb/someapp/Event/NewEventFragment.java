@@ -33,6 +33,7 @@ import java.util.List;
 import java.util.UUID;
 
 import nodatingapp.fb.someapp.Activities.PickDateActivity;
+import nodatingapp.fb.someapp.Helpers.Authentication;
 import nodatingapp.fb.someapp.Helpers.HttpHandler;
 import nodatingapp.fb.someapp.Helpers.JSONCreator;
 import nodatingapp.fb.someapp.LocationStuff.OurLocationProvider;
@@ -189,6 +190,14 @@ public class NewEventFragment extends Fragment {
             jsonCreator.addField("latitude", latitude);
             jsonCreator.addField("longitude", longitude);
             jsonCreator.addField("radius", 212);
+
+            JSONCreator userJson = new JSONCreator();
+            userJson.addField("name", Authentication.getCurrentUser().getName());
+            userJson.addField("surname", Authentication.getCurrentUser().getSurname());
+            userJson.addField("email", Authentication.getCurrentUser().getEmail());
+            userJson.addField("rating", Authentication.getCurrentUser().getRating());
+
+            jsonCreator.addField("organiser", userJson.getFinalObject());
             jsonCreator.addField("limit", Integer.parseInt(inputPersonLimit.getText().toString()));
             jsonCreator.addField("date", outputDate);
 
