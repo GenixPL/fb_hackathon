@@ -16,6 +16,7 @@ public class User implements Serializable
     private String name = "Edvinko";
     private String surname = "Edvin";
     private String email = "mako_edvin@yahoo.com";
+    private String profilePicture = "https://scontent-frx5-1.xx.fbcdn.net/v/t1.0-9/20800173_1442162092531922_2178335607955134230_n.jpg?_nc_cat=0&oh=575aae335e2c5150bce183baf492e20c&oe=5B781C15";
     private Double rating = 2.3;
     private List<String> userCategories;
 
@@ -64,5 +65,13 @@ public class User implements Serializable
 
     public void setSurname(String surname) {
         this.surname = surname;
+    }
+
+    public String getProfilePicture() {
+        return profilePicture;
+    }
+
+    public void setProfilePicture(String profilePicture) {
+        this.profilePicture = profilePicture;
     }
 }

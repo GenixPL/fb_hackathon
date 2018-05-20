@@ -16,17 +16,18 @@ import com.bumptech.glide.Glide;
 import nodatingapp.fb.someapp.Event.Models.Participant;
 import nodatingapp.fb.someapp.Event.ParticipantsFragment.OnListFragmentInteractionListener;
 import nodatingapp.fb.someapp.R;
+import nodatingapp.fb.someapp.User.User;
 
 import java.util.List;
 
 public class ParticipantsListAdapter extends RecyclerView.Adapter<ParticipantsListAdapter.ViewHolder> {
 
-    private final List<Participant> mValues;
+    private final List<User> mValues;
     private final OnListFragmentInteractionListener mListener;
 
     private Context context;
 
-    public ParticipantsListAdapter(Context context, List<Participant> items, OnListFragmentInteractionListener listener) {
+    public ParticipantsListAdapter(Context context, List<User> items, OnListFragmentInteractionListener listener) {
         this.mValues    = items;
         this.mListener  = listener;
         this.context    = context;
@@ -40,13 +41,12 @@ public class ParticipantsListAdapter extends RecyclerView.Adapter<ParticipantsLi
 
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
-        final Participant participant = mValues.get(position);
+        final User participant = mValues.get(position);
 
-        Log.d("ParticipantAdapter", "Url: " + participant.getPictureUrl());
-        Glide.with(this.context).load(participant.getPictureUrl()).into(holder.imageViewProfile);
+        Glide.with(this.context).load(participant.getProfilePicture()).into(holder.imageViewProfile);
         holder.ratingBarUser.setRating(participant.getRating().floatValue());
-        holder.textViewUsername.setText(participant.getUserName());
-        holder.textViewComment.setText(participant.getDetails());
+        holder.textViewUsername.setText(participant.getName());
+        holder.textViewComment.setText("I'm just a very nice participant");
 
         holder.mainView.setOnClickListener(new View.OnClickListener() {
             @Override
