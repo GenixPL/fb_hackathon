@@ -20,10 +20,13 @@ import android.widget.Toast;
 import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 import nodatingapp.fb.someapp.Event.EventMap;
+import nodatingapp.fb.someapp.Helpers.HttpHandler;
+import nodatingapp.fb.someapp.LocationStuff.OurLocationProvider;
 import nodatingapp.fb.someapp.R;
 
 public class SetAvailabilityActivity extends AppCompatActivity {
@@ -33,12 +36,16 @@ public class SetAvailabilityActivity extends AppCompatActivity {
     private Spinner spinner;
 
     private static final int NEW_EVENT_REQUEST_CODE = 0;
+    private static final int NEW_EVENT_REQUEST_CODE_DATE = 1;
     private static double placeLat;
     private static double placeLon;
-    public static Date mapViewDate;
+    private Date mapViewDate;
 
+    private OurLocationProvider ourLocationProvider;
     private NotificationCompat.Builder notification;
     private static final int uniqueID = 69;
+
+    private boolean flagForLoop = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,11 +54,10 @@ public class SetAvailabilityActivity extends AppCompatActivity {
 
         date_textView = findViewById(R.id.textView_date);
         place_textView = findViewById(R.id.textView_place);
+        spinner = findViewById(R.id.spinner_fromSet);
+        ourLocationProvider = new OurLocationProvider(this);
 
-        if(mapViewDate != null) {
-            DateFormat formater = new SimpleDateFormat("MM-dd hh:mm");
-            date_textView.setText("Date: " + mapViewDate.getYear() + "-" + formater.format(mapViewDate).toString());
-        }
+        setEventDate();
         setEventPlace();
     }
 
@@ -60,8 +66,7 @@ public class SetAvailabilityActivity extends AppCompatActivity {
     }
 
     public void goToPickDate_But(View view) {
-        startActivity(new Intent(this, PickDateActivity.class));
-        this.finish();
+        startActivityForResult(new Intent(this, PickDateActivity.class), NEW_EVENT_REQUEST_CODE_DATE);
     }
 
     @Override
@@ -76,7 +81,20 @@ public class SetAvailabilityActivity extends AppCompatActivity {
                 placeLat = data.getDoubleExtra("latitude", 0f);
                 placeLon = data.getDoubleExtra("longitude", 0f);
 
-                setEventPlace();
+                //setEventPlace();
+            }
+        } else if (requestCode == NEW_EVENT_REQUEST_CODE_DATE) {
+            if (resultCode == RESULT_OK) {
+
+                int year = data.getIntExtra("year", 0);
+                int month = data.getIntExtra("month", 0);
+                int day = data.getIntExtra("day", 0);
+                int hour = data.getIntExtra("hour", 0);
+                int minutes = data.getIntExtra("minutes", 0);
+//                mapViewDate = new Date(year, month, day, hour, minutes);
+                date_textView.setText("Date: " + year + "-" + (month +1)+ "-" + day + " " +
+                        hour + ":" + minutes);
+//                setEventDate();
             }
         }
     }
@@ -96,26 +114,67 @@ public class SetAvailabilityActivity extends AppCompatActivity {
         }
     }
 
+    private void setEventDate(){
+        if(mapViewDate != null) {
+            date_textView.setText("Date: " + mapViewDate.getYear() + "-" + mapViewDate.getMonth()+"-"+mapViewDate.getDay() +" " +
+            mapViewDate.getHours() + ":" + mapViewDate.getMinutes());
+        }
+    }
+
     private void makeToast(String message){
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
     }
 
     public void startNotifying_But(View view) {
-        notification = new NotificationCompat.Builder(this,"hmm");
-        notification.setAutoCancel(true);
-        notification.setSmallIcon(R.mipmap.ic_launcher);
-        notification.setTicker("Socialize: New events!");
-        notification.setWhen(System.currentTimeMillis());
-        notification.setContentTitle("Socialize");
-        notification.setContentText("New events are available nearby you!");
+        AsyncTask.execute(new Runnable() {
+            @Override
+            public void run() {
+                //TODO your background code
 
-        Intent intent = new Intent(this, MapAcitivity.class);
-        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0 , intent, PendingIntent.FLAG_UPDATE_CURRENT);
-        notification.setContentIntent(pendingIntent);
+                while (true) {
+                    try {
+                        Thread.sleep(1000);
+                    } catch (Exception e) {
+                        break;
+                    }
 
-        NotificationManager nm = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
-        nm.notify(uniqueID, notification.build());
+                    isEventAvailable();
+
+                    if (flagForLoop) {
+                        notification = new NotificationCompat.Builder(getApplicationContext(), "hmm");
+                        notification.setAutoCancel(true);
+                        notification.setSmallIcon(R.mipmap.ic_launcher);
+                        notification.setTicker("Socialize: New events!");
+                        notification.setWhen(System.currentTimeMillis());
+                        notification.setContentTitle("Socialize");
+                        notification.setContentText("New events are available nearby you!");
+
+                        Intent intent = new Intent(getApplicationContext(), MapAcitivity.class);
+                        PendingIntent pendingIntent = PendingIntent.getActivity(getApplicationContext(), 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+                        notification.setContentIntent(pendingIntent);
+
+                        NotificationManager nm = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+                        nm.notify(uniqueID, notification.build());
+
+                        break;
+                    }
+                }
+            }
+        });
 
         this.finish();
+    }
+
+    private void isEventAvailable(){
+        ArrayList<String> tags = new ArrayList<String>();
+        tags.add(spinner.getSelectedItem().toString());
+
+        ourLocationProvider.getFilteredEvents(tags, new HttpHandler.IOnRequestFinished() {
+            @Override
+            public void onRequestFinished(String output) {
+                makeToast(output);
+                flagForLoop = true;
+            }
+        });
     }
 }
