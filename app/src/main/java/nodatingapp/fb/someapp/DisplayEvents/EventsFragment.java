@@ -97,7 +97,7 @@ public class EventsFragment extends Fragment {
                             usr.setSurname(jsonObjectUser.getString("surname"));
                             usr.setEmail(jsonObjectUser.getString("email"));
                             usr.setRating(jsonObjectUser.getDouble("rating"));
-                            usr.setProfilePicture(creatorJson.getString("profilePicture"));
+                            usr.setProfilePicture(jsonObjectUser.getString("profilePicture"));
 
                             Log.d("EventsFragment", "Debug this");
                             event.addParticipant(usr);
