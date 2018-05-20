@@ -96,11 +96,6 @@ public class LoginActivity extends AppCompatActivity {
                 Log.d("LoginActivity", "Exception: " + exception);
             }
         });
-
-        Log.d("NewEvent", "Name = " + Authentication.getCurrentUser().getName());
-        Log.d("NewEvent", "Surname = " + Authentication.getCurrentUser().getSurname());
-        Log.d("NewEvent", "Email = " + Authentication.getCurrentUser().getEmail());
-        Log.d("NewEvent", "Rating = " + Authentication.getCurrentUser().getRating());
     }
 
     @Override
