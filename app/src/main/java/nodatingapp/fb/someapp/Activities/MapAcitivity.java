@@ -21,6 +21,7 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -55,6 +56,7 @@ public class MapAcitivity extends AppCompatActivity implements OnMapReadyCallbac
     private OurLocationProvider ourLocationProvider;
     private GoogleMap mMap;
     private Spinner spinner;
+    private List<Event> eventList;
 
     public static int mapLevel = 15;
 
@@ -70,6 +72,7 @@ public class MapAcitivity extends AppCompatActivity implements OnMapReadyCallbac
         //VARIABLES
         ourLocationProvider = new OurLocationProvider(this);
         spinner = findViewById(R.id.spinner_fromMap);
+        initSpinnerListener();
 
         //LOCATION
         Location loc = ourLocationProvider.getCurrentUserLocation();
@@ -80,6 +83,21 @@ public class MapAcitivity extends AppCompatActivity implements OnMapReadyCallbac
         }
     }
 
+    private void initSpinnerListener(){
+        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                doFetchingStuff();
+                populateMap();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+    }
+
     private void makeToast(String message){
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
     }
@@ -88,6 +106,13 @@ public class MapAcitivity extends AppCompatActivity implements OnMapReadyCallbac
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
         mMap.getUiSettings().setZoomControlsEnabled(true);
+
+        doFetchingStuff();
+        populateMap();
+    }
+
+    private void populateMap(){
+        mMap.clear();
 
         // Add a marker in current user position
         double lat = ourLocationProvider.getCurrentUserLocation().getLatitude();
@@ -113,22 +138,19 @@ public class MapAcitivity extends AppCompatActivity implements OnMapReadyCallbac
         mMap.addMarker(new MarkerOptions().position(new LatLng(lat4, lon4)).title("Barbara")
                 .icon(BitmapDescriptorFactory
                         .defaultMarker(BitmapDescriptorFactory.HUE_AZURE)));
-
-        fetchEvents();
     }
 
-    private void fetchEvents(){
-        ArrayList<String> tags = new ArrayList<String>();
-        tags.add(spinner.getSelectedItem().toString());
-
-        ourLocationProvider.getFilteredEvents(tags, new HttpHandler.IOnRequestFinished() {
+    private void doFetchingStuff(){
+        HttpHandler httpHandler = new HttpHandler("http://3d1342c1.ngrok.io/event/get", HttpHandler.Type.GET, new HttpHandler.IOnRequestFinished() {
             @Override
             public void onRequestFinished(String output) {
+                Log.d("EventsFragment", "Output: " + output);
+
                 try {
                     JSONArray jsonObject = new JSONArray(output);
 
-                    List<Event> eventList = new ArrayList<>();
-                    for (int i = 0; i < jsonObject.length(); i++) {
+                    eventList = new ArrayList<>();
+                    for(int i = 0; i < jsonObject.length(); i++) {
                         JSONObject ev = jsonObject.getJSONObject(i);
 
                         Event event = new Event();
@@ -139,10 +161,11 @@ public class MapAcitivity extends AppCompatActivity implements OnMapReadyCallbac
                         event.setPersonLimit(ev.getInt("limit"));
                         event.setPlace(ev.getString("placeName"));
                         event.setEventUnique(ev.getString("uniqueKey"));
+                        event.setCategory(ev.getJSONArray("tags").getJSONObject(0).getString("name"));
 
                         JSONArray userJsonObjects = new JSONArray(ev.getString("participants"));
 
-                        for (int j = 0; j < userJsonObjects.length(); j++) {
+                        for(int j = 0; j < userJsonObjects.length(); j++) {
                             JSONObject jsonObjectUser = userJsonObjects.getJSONObject(j);
                             User usr = new User();
                             usr.setName(jsonObjectUser.getString("name"));
@@ -153,11 +176,15 @@ public class MapAcitivity extends AppCompatActivity implements OnMapReadyCallbac
                             Log.d("EventsFragment", "Debug this");
                             event.addParticipant(usr);
                         }
-                        mMap.addMarker(new MarkerOptions().position(new LatLng(event.getLatitude(), event.getLongitude())).title("Barbara")
-                                .icon(BitmapDescriptorFactory
-                                        .defaultMarker(BitmapDescriptorFactory.HUE_YELLOW)));
-                        eventList.add(event);
-                        makeToast("Data fetched from server");
+
+                        if(event.getCategory() != null) {
+                            if (event.getCategory().equals(spinner.getSelectedItem().toString()) || spinner.getSelectedItem().equals("All")) {
+                                mMap.addMarker(new MarkerOptions().position(new LatLng(event.getLatitude(), event.getLongitude()))
+                                        .title(event.getName())
+                                        .icon(BitmapDescriptorFactory
+                                                .defaultMarker(BitmapDescriptorFactory.HUE_YELLOW)));
+                            }
+                        }
                     }
 
                 } catch (JSONException e) {
@@ -165,6 +192,7 @@ public class MapAcitivity extends AppCompatActivity implements OnMapReadyCallbac
                 }
             }
         });
+        httpHandler.execute();
     }
 
     public void goToCurrentEvents_But(View view) {
