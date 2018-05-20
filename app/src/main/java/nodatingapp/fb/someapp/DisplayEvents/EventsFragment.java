@@ -61,6 +61,7 @@ public class EventsFragment extends Fragment {
                         event.setLongitude(ev.getDouble("longitude"));
                         event.setPersonLimit(ev.getInt("limit"));
                         event.setPlace(ev.getString("placeName"));
+                        event.setEventTime(ev.getString("date"));
                         event.setEventUnique(ev.getString("uniqueKey"));
 
                         JSONArray userJsonObjects = new JSONArray(ev.getString("participants"));

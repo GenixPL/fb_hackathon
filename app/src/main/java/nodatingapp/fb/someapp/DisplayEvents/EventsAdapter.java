@@ -57,6 +57,7 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.ViewHolder
 
         holder.textViewName.setText(mValues.get(position).getName());
         holder.textViewOrganizerName.setText("Edvin");
+        holder.textViewDate.setText(mValues.get(position).getEventTime().toString());
         holder.buttonInfo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -69,8 +70,6 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.ViewHolder
             }
         });
 
-        Log.d("EventsAdapter", "Latitude= " + mValues.get(position).getLatitude());
-        Log.d("EventsAdapter", "Longitude= " + mValues.get(position).getLongitude());
         Glide.with(this.context).load("https://maps.googleapis.com/maps/api/staticmap?center=" + mValues.get(position).getLatitude() + "," + mValues.get(position).getLongitude() + "&zoom=16&size=600x300&maptype=roadmap&markers=color:red%7Clabel:S%7C" + mValues.get(position).getLatitude() + "," + mValues.get(position).getLongitude() + "&key=AIzaSyBEg0bNOmQ3x-i5Y9sv1Oc799uRM9lhe84").into(holder.imageViewLocationInfo);
     }
 
@@ -84,6 +83,7 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.ViewHolder
         private TextView textViewName;
         private ImageView imageViewLocationInfo;
         private TextView textViewOrganizerName;
+        private TextView textViewDate;
         private Button buttonInfo;
 
         public ViewHolder(View view) {
@@ -92,6 +92,7 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.ViewHolder
             textViewName = view.findViewById(R.id.textViewName);
             imageViewLocationInfo = view.findViewById(R.id.imageViewLocationInfo);
             textViewOrganizerName = view.findViewById(R.id.textViewOrganizerName);
+            textViewDate = view.findViewById(R.id.textViewDate);
             buttonInfo = view.findViewById(R.id.buttonInfo);
         }
     }

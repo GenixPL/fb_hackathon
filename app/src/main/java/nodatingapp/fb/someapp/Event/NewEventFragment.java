@@ -24,7 +24,11 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
@@ -57,6 +61,8 @@ public class NewEventFragment extends Fragment {
 
     private Double latitude;
     private Double longitude;
+
+    private String outputDate;
 
     public NewEventFragment() { }
 
@@ -128,7 +134,19 @@ public class NewEventFragment extends Fragment {
                 int day = data.getIntExtra("day", 0);
                 int hour = data.getIntExtra("hour", 0);
                 int minutes = data.getIntExtra("minutes", 0);
-                textViewDate.setText("Date: " + year + "-" + (month +1)+ "-" + day + " " + hour + ":" + minutes);
+
+                DateFormat format = new SimpleDateFormat("dd-MM-yyyy HH:ss");
+                try {
+                    Date date = format.parse(day + "-" + month + "-" + year + " " + hour + ":" + minutes);
+
+                    outputDate = new SimpleDateFormat("H:m, d MMM yyyy z").format(date);
+                    Log.d("NewEvents", "Output date:" + outputDate);
+
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+
+                textViewDate.setText(outputDate);
             }
         }
     }
@@ -172,7 +190,7 @@ public class NewEventFragment extends Fragment {
             jsonCreator.addField("longitude", longitude);
             jsonCreator.addField("radius", 212);
             jsonCreator.addField("limit", Integer.parseInt(inputPersonLimit.getText().toString()));
-            jsonCreator.addField("date", "12:34, 3 Dec 1997 PST");
+            jsonCreator.addField("date", outputDate);
 
             HttpHandler httpHandler = new HttpHandler("http://3d1342c1.ngrok.io/event/create", HttpHandler.Type.POST, new HttpHandler.IOnRequestFinished() {
                 @Override
