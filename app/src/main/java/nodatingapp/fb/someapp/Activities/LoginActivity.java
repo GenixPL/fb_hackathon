@@ -21,6 +21,7 @@ import org.json.JSONObject;
 
 import java.util.Arrays;
 
+import nodatingapp.fb.someapp.Helpers.Authentication;
 import nodatingapp.fb.someapp.R;
 import nodatingapp.fb.someapp.User.User;
 
@@ -34,6 +35,8 @@ public class LoginActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+
+        Authentication.loadUserData(this);
 
         callbackManager = CallbackManager.Factory.create();
 
@@ -63,6 +66,9 @@ public class LoginActivity extends AppCompatActivity {
                                     user.setRating(5.0);
                                     user.setProfilePicture(object.getJSONObject("picture").getJSONObject("data").getString("url"));
                                     user.setSurname(object.getString("last_name"));
+
+                                    Authentication.setCurrentUser(user);
+                                    Authentication.saveUserData(LoginActivity.this);
 
                                 } catch (JSONException e) {
                                     e.printStackTrace();
