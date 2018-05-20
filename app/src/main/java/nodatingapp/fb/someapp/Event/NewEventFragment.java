@@ -28,6 +28,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+import nodatingapp.fb.someapp.Activities.PickDateActivity;
 import nodatingapp.fb.someapp.Helpers.HttpHandler;
 import nodatingapp.fb.someapp.Helpers.JSONCreator;
 import nodatingapp.fb.someapp.LocationStuff.OurLocationProvider;
@@ -38,16 +39,19 @@ import static android.app.Activity.RESULT_OK;
 public class NewEventFragment extends Fragment {
 
     private static final int NEW_EVENT_REQUEST_CODE = 0;
+    private static final int NEW_EVENT_REQUEST_CODE_DATE = 1;
 
     private TextView textViewUniqueKey;
+    private TextView textViewDate;
     private Button buttonConfirmation;
     private Button buttonShowMap;
     private ImageButton buttonLocateMe;
     private EditText inputPersonLimit;
     private Spinner dropdownCategories;
-    private EditText inputTime;
     private EditText inputName;
     private EditText inputPlace;
+
+    private Button buttonAddDate;
 
     private String uniqueID;
 
@@ -72,11 +76,12 @@ public class NewEventFragment extends Fragment {
         buttonConfirmation  = view.findViewById(R.id.buttonConfirmation);
         inputPersonLimit    = view.findViewById(R.id.inputPersonLimit);
         dropdownCategories  = view.findViewById(R.id.dropdownCategories);
-        inputTime           = view.findViewById(R.id.inputTime);
         inputName           = view.findViewById(R.id.inputName);
         inputPlace          = view.findViewById(R.id.inputPlace);
         buttonShowMap       = view.findViewById(R.id.buttonShowMap);
         buttonLocateMe      = view.findViewById(R.id.buttonLocateMe);
+        buttonAddDate       = view.findViewById(R.id.buttonAddDate);
+        textViewDate        = view.findViewById(R.id.textViewDate);
 
         return view;
     }
@@ -88,6 +93,12 @@ public class NewEventFragment extends Fragment {
         buttonConfirmation.setOnClickListener(onClickListener);
         buttonShowMap.setOnClickListener(onMapClickListener);
         buttonLocateMe.setOnClickListener(onLocateMeClickListener);
+        buttonAddDate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivityForResult(new Intent(getActivity(), PickDateActivity.class), NEW_EVENT_REQUEST_CODE_DATE);
+            }
+        });
     }
 
     @Override
@@ -107,6 +118,17 @@ public class NewEventFragment extends Fragment {
                 Log.d("NewEvent", "Lng 2: " + longitude);
 
                 setEventPlace(latitude, longitude);
+            }
+        }
+        else if (requestCode == NEW_EVENT_REQUEST_CODE_DATE) {
+            if (resultCode == RESULT_OK) {
+
+                int year = data.getIntExtra("year", 0);
+                int month = data.getIntExtra("month", 0);
+                int day = data.getIntExtra("day", 0);
+                int hour = data.getIntExtra("hour", 0);
+                int minutes = data.getIntExtra("minutes", 0);
+                textViewDate.setText("Date: " + year + "-" + (month +1)+ "-" + day + " " + hour + ":" + minutes);
             }
         }
     }
