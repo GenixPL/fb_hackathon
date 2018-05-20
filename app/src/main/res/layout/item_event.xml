@@ -2,44 +2,56 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/layoutMain"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="horizontal"
-    android:padding="13dp">
+    android:layout_height="wrap_content"
+    android:orientation="horizontal">
 
-
-    <TextView
-        android:id="@+id/textViewName"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:text="TextView"
-        android:textSize="18sp"
-        android:textStyle="bold" />
-
-    <com.google.android.gms.maps.MapView
-        android:id="@+id/mapViewLocationInfo"
+    <RelativeLayout
+        android:id="@+id/relativeLayoutNewEvent"
         android:layout_width="match_parent"
-        android:layout_height="180dp"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true"
-        android:layout_marginTop="28dp" />
-
-    <TextView
-        android:id="@+id/textViewOrganizerName"
-        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
-        android:layout_below="@+id/mapViewLocationInfo"
-        android:layout_marginTop="15dp"
-        android:text="TextView" />
+        android:padding="13dp">
 
-    <Button
-        android:id="@+id/buttonInfo"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentEnd="true"
-        android:layout_below="@+id/mapViewLocationInfo"
-        android:text="More Info" />
+        <TextView
+            android:id="@+id/textViewName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:text="TextView"
+            android:textSize="18sp"
+            android:textStyle="bold" />
 
+        <ImageView
+            android:id="@+id/imageViewLocationInfo"
+            android:layout_width="match_parent"
+            android:layout_height="180dp"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginTop="28dp"
+            android:scaleType="fitXY" />
+
+        <TextView
+            android:id="@+id/textViewOrganizerName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_below="@+id/imageViewLocationInfo"
+            android:layout_marginTop="15dp"
+            android:text="TextView" />
+
+        <Button
+            android:id="@+id/buttonInfo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_below="@+id/imageViewLocationInfo"
+            android:text="More Info" />
+
+    </RelativeLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:layout_below="@id/relativeLayoutNewEvent"
+        android:background="#66000000"/>
 </RelativeLayout>

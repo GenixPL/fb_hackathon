@@ -1,9 +1,12 @@
 package nodatingapp.fb.someapp.Event.Models;
 
+import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
-public class Event
+import nodatingapp.fb.someapp.User.User;
+
+public class Event implements Serializable
 {
     private String place;
     private String name;
@@ -11,7 +14,10 @@ public class Event
     private String category;
     private Integer personLimit;
     private String eventUnique;
+    private Double latitude;
+    private Double longitude;
     private List<Participant> participants;
+    private User creator;
 
     public Event() {}
 
@@ -61,5 +67,37 @@ public class Event
 
     public void setEventUnique(String eventUnique) {
         this.eventUnique = eventUnique;
+    }
+
+    public Double getLatitude() {
+        return latitude;
+    }
+
+    public void setLatitude(Double latitude) {
+        this.latitude = latitude;
+    }
+
+    public Double getLongitude() {
+        return longitude;
+    }
+
+    public void setLongitude(Double longitude) {
+        this.longitude = longitude;
+    }
+
+    public List<Participant> getParticipants() {
+        return participants;
+    }
+
+    public void setParticipants(List<Participant> participants) {
+        this.participants = participants;
+    }
+
+    public User getCreator() {
+        return creator;
+    }
+
+    public void setCreator(User creator) {
+        this.creator = creator;
     }
 }
