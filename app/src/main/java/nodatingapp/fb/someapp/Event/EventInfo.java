@@ -103,6 +103,7 @@ public class EventInfo extends android.support.v4.app.Fragment {
                 jsonCreator.addField("name", Authentication.getCurrentUser().getName());
                 jsonCreator.addField("surname", Authentication.getCurrentUser().getSurname());
                 jsonCreator.addField("email", Authentication.getCurrentUser().getEmail());
+                jsonCreator.addField("profilePicture", Authentication.getCurrentUser().getProfilePicture());
                 jsonCreator.addField("tags", jsonArray);
                 jsonCreator.addField("rating", Authentication.getCurrentUser().getRating());
 

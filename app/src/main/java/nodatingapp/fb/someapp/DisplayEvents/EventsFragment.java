@@ -84,6 +84,7 @@ public class EventsFragment extends Fragment {
                         u.setName(creatorJson.getString("name"));
                         u.setSurname(creatorJson.getString("surname"));
                         u.setEmail(creatorJson.getString("email"));
+                        u.setProfilePicture(creatorJson.getString("profilePicture"));
                         u.setRating(creatorJson.getDouble("rating"));
                         event.setCreator(u);
 
@@ -96,6 +97,7 @@ public class EventsFragment extends Fragment {
                             usr.setSurname(jsonObjectUser.getString("surname"));
                             usr.setEmail(jsonObjectUser.getString("email"));
                             usr.setRating(jsonObjectUser.getDouble("rating"));
+                            usr.setProfilePicture(creatorJson.getString("profilePicture"));
 
                             Log.d("EventsFragment", "Debug this");
                             event.addParticipant(usr);
