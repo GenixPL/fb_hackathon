@@ -7,11 +7,20 @@ import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
-import android.util.Log;
 import android.widget.Toast;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.List;
+
+import nodatingapp.fb.someapp.Helpers.HttpHandler;
+import nodatingapp.fb.someapp.Helpers.HttpJsonArrayHandler;
 
 public class OurLocationProvider {
 
@@ -52,6 +61,48 @@ public class OurLocationProvider {
         }
     }
 
+    public void getFilteredEvents(List<String> tags, HttpHandler.IOnRequestFinished callback) {
+
+        if (tags.contains("All")) {
+            getAllEvents(callback);
+            return;
+        }
+
+        Uri.Builder uriBuilder = new Uri.Builder().scheme("http")
+                .authority("3d1342c1.ngrok.io")
+                .appendPath("event").appendPath("getFiltered");
+
+        final String mURL = uriBuilder.build().toString();
+
+        JSONArray jsonArray = new JSONArray();
+
+        for (String tag: tags) {
+            try {
+                jsonArray.put(new JSONObject().put("name", tag));
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+
+        HttpJsonArrayHandler handler = new HttpJsonArrayHandler(mURL, HttpHandler.Type.POST, callback);
+
+        handler.setJsonObject(jsonArray);
+
+        handler.execute(new String[0]);
+    }
+
+    private void getAllEvents(HttpHandler.IOnRequestFinished callback) {
+        Uri.Builder uriBuilder = new Uri.Builder().scheme("http")
+                .authority("3d1342c1.ngrok.io")
+                .appendPath("event").appendPath("get");
+
+        final String mURL = uriBuilder.build().toString();
+
+        HttpJsonArrayHandler handler = new HttpJsonArrayHandler(mURL, HttpHandler.Type.GET, callback);
+
+        handler.execute(new String[0]);
+    }
+
     public Location getCurrentUserLocation() {
         if (ContextCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             // Permission is not granted
@@ -71,8 +122,6 @@ public class OurLocationProvider {
 
         return currentLocation;
     }
-
-
 
     private void makeToast(String message){
         Toast.makeText(context, message, Toast.LENGTH_SHORT).show();
